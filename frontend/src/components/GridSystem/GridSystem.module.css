@@ -1,0 +1,33 @@
+.grid-container {
+  width: 93%;
+  height: 100%;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.grid-matrix {
+  position: absolute;
+  width: 80ch;
+  height: 24lh;
+  font-size: 1cqw; /* update later */
+  line-height: 3cqh;
+  /* :has(.acos){
+    line-height: 3.7cqh;
+  } */
+  display: grid;
+  grid-template-columns: repeat(80, 1fr);
+  grid-template-rows: repeat(24, 1fr);
+  @media screen and (max-width: 1600px) {
+    font-size: 1.1cqw;
+  }
+  @media screen and (max-width: 1366px) {
+    font-size: 1cqw;
+  }
+}
+
+.line-break {
+  width: 100%;
+  border-bottom: 1px dashed #fff;
+}

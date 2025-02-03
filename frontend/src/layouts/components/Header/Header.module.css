@@ -1,0 +1,12 @@
+.wrapper {
+  padding: 1.5rem 1rem;
+
+  display: flex;
+  justify-content: end;
+  align-items: center;
+}
+
+.actions a,
+.actions button {
+  padding: 1rem;
+}

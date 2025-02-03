@@ -1,0 +1,38 @@
+.wrapper {
+  padding: 2rem;
+  /* max-height: 80rem; */
+  height: 100%;
+  width: 22%;
+  border-radius: 5px;
+  overflow-y: scroll;
+  font-size: 1.6rem;
+  font-weight: lighter;
+  @media screen and (max-width: 1366px) {
+    width: 18%;
+    font-size: 1.4rem;
+  }
+  @media screen and (max-width: 1024px) {
+    font-size: 1.2rem;
+  }
+}
+
+.title {
+  padding: 1rem 0;
+  cursor: pointer;
+}
+
+.menu-wrapper {
+  padding: 0 1rem;
+  list-style-type: none;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.menu-wrapper li {
+  padding: 0.5rem 0;
+}
+
+.menu-wrapper li a {
+  display: block;
+}

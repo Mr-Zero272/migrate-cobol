@@ -1,0 +1,37 @@
+.menu-wrapper {
+  color: var(--default-foreground);
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0px 1px 1px rgb(0 0 0 / 12%);
+}
+
+.menu-header {
+  width: 100%;
+  display: flex;
+  padding: 0.3rem 0;
+}
+
+.menu-header-title {
+  text-align: center;
+  flex: 1;
+}
+
+.back-btn {
+  border: 0;
+  background: inherit;
+  color: inherit;
+}
+
+.menu-item {
+  display: block;
+  border: 0;
+  padding: 1rem 1rem;
+  background: inherit;
+  color: var(--default-foreground);
+  text-align: left;
+}
+
+button.menu-item:hover,
+.back-btn:hover {
+  background: none;
+}

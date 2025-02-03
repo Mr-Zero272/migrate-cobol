@@ -1,0 +1,21 @@
+.wrapper {
+  margin-top: 2rem;
+  height: 7vh; /*28%;*/
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  @media screen and (max-width: 1600px) {
+    font-size: 1.1cqw;
+    height: 5vh;
+  }
+  @media screen and (max-width: 1366px) {
+    font-size: 1.1cqw;
+  }
+}
+
+.actions {
+  width: 70%;
+  display: flex;
+  justify-content: space-around;
+}
