@@ -2,8 +2,6 @@ package com.group_imposter.migrate.accessor;
 
 import com.group_imposter.migrate.constant.ValueConst;
 import com.group_imposter.migrate.model.WsDateTime;
-import com.group_imposter.migrate.util.FieldFormat;
-import com.group_imposter.migrate.util.ValueUtil;
 
 
 public class WsDateTime_Accessor {
@@ -279,4 +277,5 @@ public class WsDateTime_Accessor {
     public static void initializeWsCurtimeN(WsDateTime wsDateTime){
         WsDateTime_Accessor.setWsCurtime(wsDateTime, ValueConst.SPACE);
     }
+//
 }

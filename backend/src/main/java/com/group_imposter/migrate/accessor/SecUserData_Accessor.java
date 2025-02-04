@@ -2,7 +2,6 @@ package com.group_imposter.migrate.accessor;
 
 import com.group_imposter.migrate.constant.ValueConst;
 import com.group_imposter.migrate.model.SecUserData;
-import com.group_imposter.migrate.util.FieldFormat;
 
 public class SecUserData_Accessor {
     public static String getSecUserData(SecUserData secUserData){
@@ -36,4 +35,5 @@ public class SecUserData_Accessor {
         secUserData.setSecUsrType(ValueConst.SPACE);
         secUserData.setSecUsrFiller(FieldFormat.format(23, ValueConst.SPACE));
     }
+//
 }
