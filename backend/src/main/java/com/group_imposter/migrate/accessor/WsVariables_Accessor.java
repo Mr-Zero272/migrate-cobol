@@ -1,7 +1,10 @@
 package com.group_imposter.migrate.accessor;
 
+import com.group_imposter.migrate.constant.ValueConst;
 import com.group_imposter.migrate.model.WsVariables;
 import com.group_imposter.migrate.util.FieldFormat;
+import com.group_imposter.migrate.util.StringUtil;
+import com.group_imposter.migrate.util.ValueUtil;
 
 public class WsVariables_Accessor {
 
