@@ -2,6 +2,8 @@ package com.group_imposter.migrate.service.impl;
 
 import com.group_imposter.migrate.dto.request.SecUserDataRequestDto;
 import com.group_imposter.migrate.dto.response.ResponseObject;
+import com.group_imposter.migrate.file.FileAccessBase;
+import com.group_imposter.migrate.file.FileOpenMode;
 import com.group_imposter.migrate.model.SecUserData;
 import com.group_imposter.migrate.service.SecUserService;
 import com.group_imposter.migrate.util.FieldFormat;
@@ -16,19 +18,38 @@ public class SecUserSeviceImpl implements SecUserService {
 
     @Override
     public boolean doesUserIdExist(String userId) {
-        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
-            String line;
-            while ((line = br.readLine()) != null) {
-                String existingUserId = this.extractUserId(line);
-                if (existingUserId.equals(userId)) {
-                    return true;
-                }
+//        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
+//            String line;
+//            while ((line = br.readLine()) != null) {
+//                String existingUserId = this.extractUserId(line);
+//                if (existingUserId.equals(userId)) {
+//                    return true;
+//                }
+//            }
+//        } catch (IOException e) {
+//            throw new RuntimeException("Error when reading file");
+//        }
+//
+//        return false;
+
+        FileAccessBase userSecFile = new FileAccessBase(filePath);
+        userSecFile.open(FileOpenMode.IN);
+
+        boolean isEOF = false;
+
+        while (!isEOF) {
+            userSecFile.readLine();
+
+            if (this.extractUserId(userSecFile.getCurrentLine()).equals(userId)) {
+                return true;
             }
-        } catch (IOException e) {
-            throw new RuntimeException("Error when reading file");
+
+            isEOF = userSecFile.isEOF();
         }
 
+        userSecFile.close();
         return false;
+
     }
 
     @Override
@@ -40,22 +61,29 @@ public class SecUserSeviceImpl implements SecUserService {
 
         SecUserData secUserData = new SecUserData();
 
-        secUserData.setSecUsrId(requestDto.getSecUsrId());
-        secUserData.setSecUsrFname(FieldFormat.format(20, requestDto.getSecUsrFname()));
-        secUserData.setSecUsrLname(FieldFormat.format(20, requestDto.getSecUsrLname()));
-        secUserData.setSecUsrPwd(requestDto.getSecUsrPwd());
-        secUserData.setSecUsrType(requestDto.getSecUsrType());
+        secUserData.setSecUsrId(requestDto.getSecUsrId().toUpperCase());
+        secUserData.setSecUsrFname(FieldFormat.format(20, requestDto.getSecUsrFname()).toUpperCase());
+        secUserData.setSecUsrLname(FieldFormat.format(20, requestDto.getSecUsrLname()).toUpperCase());
+        secUserData.setSecUsrPwd(requestDto.getSecUsrPwd().toUpperCase());
+        secUserData.setSecUsrType(requestDto.getSecUsrType().toUpperCase());
 
         if (doesUserIdExist(secUserData.getSecUsrId())) {
             throw new RuntimeException("User ID already exist...");
         }
 
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(filePath, true))) {
-            bw.write(secUserData.generateRecord());
-            bw.newLine();
-        } catch (IOException e) {
-            throw new RuntimeException("Unable to Add User...");
-        }
+//        try (BufferedWriter bw = new BufferedWriter(new FileWriter(filePath, true))) {
+//            bw.write(secUserData.generateRecord());
+//            bw.newLine();
+//        } catch (IOException e) {
+//            throw new RuntimeException("Unable to Add User...");
+//        }
+
+        FileAccessBase userSecFile = new FileAccessBase(filePath);
+        userSecFile.open(FileOpenMode.OUT);
+
+        userSecFile.write(secUserData.generateRecord());
+
+        userSecFile.close();
 
         ResponseObject responseObject = new ResponseObject();
         responseObject.setHttpStatus(HttpStatus.CREATED);
