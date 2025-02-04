@@ -4,13 +4,14 @@ import com.group_imposter.migrate.dto.request.SecUserDataRequestDto;
 import com.group_imposter.migrate.dto.response.ApiResponse;
 import com.group_imposter.migrate.model.SecUserData;
 import com.group_imposter.migrate.service.SecUserService;
+import com.group_imposter.migrate.util.FieldFormat;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
 
 @Service
 public class SecUserSeviceImpl implements SecUserService {
-    String filePath = "src/main/java/com/group_imposter/migrate/data";
+    String filePath = "src/main/java/com/group_imposter/migrate/data/user-security.txt";
 
     @Override
     public boolean doesUserIdExist(String userId) {
@@ -39,8 +40,8 @@ public class SecUserSeviceImpl implements SecUserService {
         SecUserData secUserData = new SecUserData();
 
         secUserData.setSecUsrId(requestDto.getSecUsrId());
-        secUserData.setSecUsrFname(requestDto.getSecUsrFname());
-        secUserData.setSecUsrLname(requestDto.getSecUsrLname());
+        secUserData.setSecUsrFname(FieldFormat.format(20, requestDto.getSecUsrFname()));
+        secUserData.setSecUsrLname(FieldFormat.format(20, requestDto.getSecUsrLname()));
         secUserData.setSecUsrPwd(requestDto.getSecUsrPwd());
         secUserData.setSecUsrType(requestDto.getSecUsrType());
 
