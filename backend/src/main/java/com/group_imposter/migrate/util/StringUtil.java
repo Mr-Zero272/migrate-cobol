@@ -5,8 +5,6 @@ import com.group_imposter.migrate.constant.CompareResultConstant;
 import java.nio.charset.Charset;
 import java.util.Arrays;
 
-
-
 public class StringUtil {
 
     public static final String EBCDIC_CHARSET = "IBM930";
@@ -41,7 +39,7 @@ public class StringUtil {
     /***
      * To compare 2 string. Returned value is 0 if equal, 1 if str1 >str2, -1 if
      * str1<str2
-     * 
+     *
      * @param str1
      * @param str2
      * @return
@@ -77,7 +75,7 @@ public class StringUtil {
 
     /***
      * To get string of HIGH-VALUE in specific length
-     * 
+     *
      * @param len
      * @return
      */
@@ -89,7 +87,7 @@ public class StringUtil {
 
     /***
      * To get string of LOW-VALUE in specific length
-     * 
+     *
      * @param len
      * @return
      */
@@ -101,7 +99,7 @@ public class StringUtil {
 
     /***
      * To get string of spaces in specific length
-     * 
+     *
      * @param len
      * @return
      */
@@ -115,10 +113,10 @@ public class StringUtil {
 
     /***
      * To padding value into right of a string
-     * 
+     *
      * @param value
      * @param addValue
-//     * @param addSize
+     * @param addSize
      * @return
      */
     public static String paddingRight(String value, String addValue, int length) {
@@ -133,10 +131,10 @@ public class StringUtil {
 
     /***
      * To add value into left of a string
-     * 
+     *
      * @param value
      * @param addValue
-//     * @param addSize
+     * @param addSize
      * @return
      */
     public static String paddingLeft(String value, String addValue, int length) {
