@@ -1,6 +1,5 @@
 package com.group_imposter.migrate;
 
-import com.group_imposter.migrate.util.FieldFormat;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
