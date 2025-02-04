@@ -1,10 +1,11 @@
 package com.group_imposter.migrate.service.impl;
 
 import com.group_imposter.migrate.dto.request.SecUserDataRequestDto;
-import com.group_imposter.migrate.dto.response.ApiResponse;
+import com.group_imposter.migrate.dto.response.ResponseObject;
 import com.group_imposter.migrate.model.SecUserData;
 import com.group_imposter.migrate.service.SecUserService;
 import com.group_imposter.migrate.util.FieldFormat;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
@@ -31,7 +32,7 @@ public class SecUserSeviceImpl implements SecUserService {
     }
 
     @Override
-    public ApiResponse<SecUserData> addNewSecUserData(SecUserDataRequestDto requestDto) {
+    public ResponseObject addNewSecUserData(SecUserDataRequestDto requestDto) {
         // validate USER-TYPE (refactor later)
         if (!requestDto.getSecUsrType().equalsIgnoreCase("A") && !requestDto.getSecUsrType().equalsIgnoreCase("U")) {
             throw new RuntimeException("User type must be A or U");
@@ -56,12 +57,12 @@ public class SecUserSeviceImpl implements SecUserService {
             throw new RuntimeException("Unable to Add User...");
         }
 
-        ApiResponse<SecUserData> apiResponse = new ApiResponse();
-        apiResponse.setCode(201);
-        apiResponse.setMessage("User " + secUserData.getSecUsrId() + " has been added ...");
-        apiResponse.setData(secUserData);
+        ResponseObject responseObject = new ResponseObject();
+        responseObject.setHttpStatus(HttpStatus.CREATED);
+        responseObject.setMessage("User " + secUserData.getSecUsrId() + " has been added ...");
+        responseObject.setData(secUserData);
 
-        return apiResponse;
+        return responseObject;
     }
 
     // Trích xuất User ID

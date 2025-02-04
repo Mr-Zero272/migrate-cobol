@@ -1,8 +1,7 @@
 package com.group_imposter.migrate.controller;
 
 import com.group_imposter.migrate.dto.request.SecUserDataRequestDto;
-import com.group_imposter.migrate.dto.response.ApiResponse;
-import com.group_imposter.migrate.model.SecUserData;
+import com.group_imposter.migrate.dto.response.ResponseObject;
 import com.group_imposter.migrate.service.SecUserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +17,7 @@ public class SecUserDataController {
     private SecUserService secUserService;
 
     @PostMapping
-    ApiResponse<SecUserData> addNewSecUserData(@RequestBody @Valid SecUserDataRequestDto requestDto) {
+    ResponseObject addNewSecUserData(@RequestBody @Valid SecUserDataRequestDto requestDto) {
         return secUserService.addNewSecUserData(requestDto);
     }
 }
