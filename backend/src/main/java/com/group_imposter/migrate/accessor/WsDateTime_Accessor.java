@@ -1,48 +1,50 @@
 package com.group_imposter.migrate.accessor;
 
+import com.group_imposter.migrate.constant.ValueConst;
 import com.group_imposter.migrate.model.WsDateTime;
 import com.group_imposter.migrate.util.FieldFormat;
+import com.group_imposter.migrate.util.ValueUtil;
 
 
 public class WsDateTime_Accessor {
     public static String getWsDateTime(WsDateTime wsDateTime) {
         StringBuilder sb = new StringBuilder();
-        sb.append(FieldFormat.format(4, wsDateTime.getWsCurdateYear()));
-        sb.append(FieldFormat.format(2, wsDateTime.getWsCurdateMonth()));
-        sb.append(FieldFormat.format(2, wsDateTime.getWsCurdateDay()));
-        sb.append(FieldFormat.format(2, wsDateTime.getWsCurtimeHours()));
-        sb.append(FieldFormat.format(2, wsDateTime.getWsCurtimeMinute()));
-        sb.append(FieldFormat.format(2, wsDateTime.getWsCurtimeSecond()));
-        sb.append(FieldFormat.format(2, wsDateTime.getWsCurtimeMilsec()));
-        sb.append(FieldFormat.format(2, wsDateTime.getWsCurdateMm()));
-        sb.append(FieldFormat.format(1, wsDateTime.getFiller1()));
-        sb.append(FieldFormat.format(2, wsDateTime.getWsCurdateDd()));
-        sb.append(FieldFormat.format(1, wsDateTime.getFiller2()));
-        sb.append(FieldFormat.format(2, wsDateTime.getWsCurdateYy()));
-        sb.append(FieldFormat.format(2, wsDateTime.getWsCurtimeHh()));
-        sb.append(FieldFormat.format(1, wsDateTime.getFiller1OfWsCurtimeHhMmSs()));
-        sb.append(FieldFormat.format(2, wsDateTime.getWsCurtimeMm()));
-        sb.append(FieldFormat.format(1, wsDateTime.getFiller2OfWsCurtimeHhMmSs()));
-        sb.append(FieldFormat.format(2, wsDateTime.getWsCurtimeSs()));
-        sb.append(FieldFormat.format(4, wsDateTime.getWsTimestampDtYyyy()));
-        sb.append(FieldFormat.format(1, wsDateTime.getFiller1OfWsTimestamp()));
-        sb.append(FieldFormat.format(2, wsDateTime.getWsTimestampDtMm()));
-        sb.append(FieldFormat.format(1, wsDateTime.getFiller2OfWsTimestamp()));
-        sb.append(FieldFormat.format(2, wsDateTime.getWsTimestampDtDd()));
-        sb.append(FieldFormat.format(1, wsDateTime.getFiller3()));
-        sb.append(FieldFormat.format(2, wsDateTime.getWsTimestampTmHh()));
-        sb.append(FieldFormat.format(1, wsDateTime.getFiller4()));
-        sb.append(FieldFormat.format(2, wsDateTime.getWsTimestampTmMm()));
-        sb.append(FieldFormat.format(1, wsDateTime.getFiller5()));
-        sb.append(FieldFormat.format(2, wsDateTime.getWsTimestampTmSs()));
-        sb.append(FieldFormat.format(1, wsDateTime.getFiller6()));
-        sb.append(FieldFormat.format(6, wsDateTime.getWsTimestampTmMs6()));
+        sb.append(FieldFormat.format(4, wsDateTime.getWsCurdateYear(), wsVariables.getWsRespCd()));
+        sb.append(FieldFormat.format(2, wsDateTime.getWsCurdateMonth(), wsVariables.getWsRespCd()));
+        sb.append(FieldFormat.format(2, wsDateTime.getWsCurdateDay(), wsVariables.getWsRespCd()));
+        sb.append(FieldFormat.format(2, wsDateTime.getWsCurtimeHours(), wsVariables.getWsRespCd()));
+        sb.append(FieldFormat.format(2, wsDateTime.getWsCurtimeMinute(), wsVariables.getWsRespCd()));
+        sb.append(FieldFormat.format(2, wsDateTime.getWsCurtimeSecond(), wsVariables.getWsRespCd()));
+        sb.append(FieldFormat.format(2, wsDateTime.getWsCurtimeMilsec(), wsVariables.getWsRespCd()));
+        sb.append(FieldFormat.format(2, wsDateTime.getWsCurdateMm(), wsVariables.getWsRespCd()));
+        sb.append(FieldFormat.format(1, wsDateTime.getFiller1(), wsVariables.getWsRespCd()));
+        sb.append(FieldFormat.format(2, wsDateTime.getWsCurdateDd(), wsVariables.getWsRespCd()));
+        sb.append(FieldFormat.format(1, wsDateTime.getFiller2(), wsVariables.getWsRespCd()));
+        sb.append(FieldFormat.format(2, wsDateTime.getWsCurdateYy(), wsVariables.getWsRespCd()));
+        sb.append(FieldFormat.format(2, wsDateTime.getWsCurtimeHh(), wsVariables.getWsRespCd()));
+        sb.append(FieldFormat.format(1, wsDateTime.getFiller1OfWsCurtimeHhMmSs(), wsVariables.getWsRespCd()));
+        sb.append(FieldFormat.format(2, wsDateTime.getWsCurtimeMm(), wsVariables.getWsRespCd()));
+        sb.append(FieldFormat.format(1, wsDateTime.getFiller2OfWsCurtimeHhMmSs(), wsVariables.getWsRespCd()));
+        sb.append(FieldFormat.format(2, wsDateTime.getWsCurtimeSs(), wsVariables.getWsRespCd()));
+        sb.append(FieldFormat.format(4, wsDateTime.getWsTimestampDtYyyy(), wsVariables.getWsRespCd()));
+        sb.append(FieldFormat.format(1, wsDateTime.getFiller1OfWsTimestamp(), wsVariables.getWsRespCd()));
+        sb.append(FieldFormat.format(2, wsDateTime.getWsTimestampDtMm(), wsVariables.getWsRespCd()));
+        sb.append(FieldFormat.format(1, wsDateTime.getFiller2OfWsTimestamp(), wsVariables.getWsRespCd()));
+        sb.append(FieldFormat.format(2, wsDateTime.getWsTimestampDtDd(), wsVariables.getWsRespCd()));
+        sb.append(FieldFormat.format(1, wsDateTime.getFiller3(), wsVariables.getWsRespCd()));
+        sb.append(FieldFormat.format(2, wsDateTime.getWsTimestampTmHh(), wsVariables.getWsRespCd()));
+        sb.append(FieldFormat.format(1, wsDateTime.getFiller4(), wsVariables.getWsRespCd()));
+        sb.append(FieldFormat.format(2, wsDateTime.getWsTimestampTmMm(), wsVariables.getWsRespCd()));
+        sb.append(FieldFormat.format(1, wsDateTime.getFiller5(), wsVariables.getWsRespCd()));
+        sb.append(FieldFormat.format(2, wsDateTime.getWsTimestampTmSs(), wsVariables.getWsRespCd()));
+        sb.append(FieldFormat.format(1, wsDateTime.getFiller6(), wsVariables.getWsRespCd()));
+        sb.append(FieldFormat.format(6, wsDateTime.getWsTimestampTmMs6(), wsVariables.getWsRespCd()));
         return sb.toString();
     }
 
 
     public static void setWsDateTime(WsDateTime wsDateTime, String value) {
-        value = FieldFormat.format(58, value);
+        value = FieldFormat.format(58, value, wsVariables.getWsRespCd());
         WsDateTime_Accessor.setWsCurdateData(wsDateTime, value.substring(0, 16));
         WsDateTime_Accessor.setWsCurdateMmDdYy(wsDateTime, value.substring(16, 24));
         WsDateTime_Accessor.setWsCurtimeHhMmSs(wsDateTime, value.substring(24, 32));
@@ -60,19 +62,19 @@ public class WsDateTime_Accessor {
 
     public static String getWsCurdateData(WsDateTime wsDateTime) {
         StringBuilder sb = new StringBuilder();
-        sb.append(FieldFormat.format(4, wsDateTime.getWsCurdateYear()));
-        sb.append(FieldFormat.format(2, wsDateTime.getWsCurdateMonth()));
-        sb.append(FieldFormat.format(2, wsDateTime.getWsCurdateDay()));
-        sb.append(FieldFormat.format(2, wsDateTime.getWsCurtimeHours()));
-        sb.append(FieldFormat.format(2, wsDateTime.getWsCurtimeMinute()));
-        sb.append(FieldFormat.format(2, wsDateTime.getWsCurtimeSecond()));
-        sb.append(FieldFormat.format(2, wsDateTime.getWsCurtimeMilsec()));
+        sb.append(FieldFormat.format(4, wsDateTime.getWsCurdateYear(), wsVariables.getWsRespCd()));
+        sb.append(FieldFormat.format(2, wsDateTime.getWsCurdateMonth(), wsVariables.getWsRespCd()));
+        sb.append(FieldFormat.format(2, wsDateTime.getWsCurdateDay(), wsVariables.getWsRespCd()));
+        sb.append(FieldFormat.format(2, wsDateTime.getWsCurtimeHours(), wsVariables.getWsRespCd()));
+        sb.append(FieldFormat.format(2, wsDateTime.getWsCurtimeMinute(), wsVariables.getWsRespCd()));
+        sb.append(FieldFormat.format(2, wsDateTime.getWsCurtimeSecond(), wsVariables.getWsRespCd()));
+        sb.append(FieldFormat.format(2, wsDateTime.getWsCurtimeMilsec(), wsVariables.getWsRespCd()));
         return sb.toString();
     }
 
 
     public static void setWsCurdateData(WsDateTime wsDateTime, String value) {
-        value = FieldFormat.format(16, value);
+        value = FieldFormat.format(16, value, wsVariables.getWsRespCd());
         WsDateTime_Accessor.setWsCurdate(wsDateTime, value.substring(0, 8));
         WsDateTime_Accessor.setWsCurtime(wsDateTime, value.substring(8, 16));
     }
@@ -86,17 +88,17 @@ public class WsDateTime_Accessor {
 
     public static String getWsCurdateMmDdYy(WsDateTime wsDateTime) {
         StringBuilder sb = new StringBuilder();
-        sb.append(FieldFormat.format(2, wsDateTime.getWsCurdateMm()));
-        sb.append(FieldFormat.format(1, wsDateTime.getFiller1()));
-        sb.append(FieldFormat.format(2, wsDateTime.getWsCurdateDd()));
-        sb.append(FieldFormat.format(1, wsDateTime.getFiller2()));
-        sb.append(FieldFormat.format(2, wsDateTime.getWsCurdateYy()));
+        sb.append(FieldFormat.format(2, wsDateTime.getWsCurdateMm(), wsVariables.getWsRespCd()));
+        sb.append(FieldFormat.format(1, wsDateTime.getFiller1(), wsVariables.getWsRespCd()));
+        sb.append(FieldFormat.format(2, wsDateTime.getWsCurdateDd(), wsVariables.getWsRespCd()));
+        sb.append(FieldFormat.format(1, wsDateTime.getFiller2(), wsVariables.getWsRespCd()));
+        sb.append(FieldFormat.format(2, wsDateTime.getWsCurdateYy(), wsVariables.getWsRespCd()));
         return sb.toString();
     }
 
 
     public static void setWsCurdateMmDdYy(WsDateTime wsDateTime, String value) {
-        value = FieldFormat.format(8, value);
+        value = FieldFormat.format(8, value, wsVariables.getWsRespCd());
         wsDateTime.setWsCurdateMm(ValueUtil.toShort(value.substring(0, 2)));
         wsDateTime.setFiller1(value.substring(2, 3));
         wsDateTime.setWsCurdateDd(ValueUtil.toShort(value.substring(3, 5)));
@@ -116,17 +118,17 @@ public class WsDateTime_Accessor {
 
     public static String getWsCurtimeHhMmSs(WsDateTime wsDateTime) {
         StringBuilder sb = new StringBuilder();
-        sb.append(FieldFormat.format(2, wsDateTime.getWsCurtimeHh()));
-        sb.append(FieldFormat.format(1, wsDateTime.getFiller1OfWsCurtimeHhMmSs()));
-        sb.append(FieldFormat.format(2, wsDateTime.getWsCurtimeMm()));
-        sb.append(FieldFormat.format(1, wsDateTime.getFiller2OfWsCurtimeHhMmSs()));
-        sb.append(FieldFormat.format(2, wsDateTime.getWsCurtimeSs()));
+        sb.append(FieldFormat.format(2, wsDateTime.getWsCurtimeHh(), wsVariables.getWsRespCd()));
+        sb.append(FieldFormat.format(1, wsDateTime.getFiller1OfWsCurtimeHhMmSs(), wsVariables.getWsRespCd()));
+        sb.append(FieldFormat.format(2, wsDateTime.getWsCurtimeMm(), wsVariables.getWsRespCd()));
+        sb.append(FieldFormat.format(1, wsDateTime.getFiller2OfWsCurtimeHhMmSs(), wsVariables.getWsRespCd()));
+        sb.append(FieldFormat.format(2, wsDateTime.getWsCurtimeSs(), wsVariables.getWsRespCd()));
         return sb.toString();
     }
 
 
     public static void setWsCurtimeHhMmSs(WsDateTime wsDateTime, String value) {
-        value = FieldFormat.format(8, value);
+        value = FieldFormat.format(8, value, wsVariables.getWsRespCd());
         wsDateTime.setWsCurtimeHh(ValueUtil.toShort(value.substring(0, 2)));
         wsDateTime.setFiller1OfWsCurtimeHhMmSs(value.substring(2, 3));
         wsDateTime.setWsCurtimeMm(ValueUtil.toShort(value.substring(3, 5)));
@@ -146,25 +148,25 @@ public class WsDateTime_Accessor {
 
     public static String getWsTimestamp(WsDateTime wsDateTime) {
         StringBuilder sb = new StringBuilder();
-        sb.append(FieldFormat.format(4, wsDateTime.getWsTimestampDtYyyy()));
-        sb.append(FieldFormat.format(1, wsDateTime.getFiller1OfWsTimestamp()));
-        sb.append(FieldFormat.format(2, wsDateTime.getWsTimestampDtMm()));
-        sb.append(FieldFormat.format(1, wsDateTime.getFiller2OfWsTimestamp()));
-        sb.append(FieldFormat.format(2, wsDateTime.getWsTimestampDtDd()));
-        sb.append(FieldFormat.format(1, wsDateTime.getFiller3()));
-        sb.append(FieldFormat.format(2, wsDateTime.getWsTimestampTmHh()));
-        sb.append(FieldFormat.format(1, wsDateTime.getFiller4()));
-        sb.append(FieldFormat.format(2, wsDateTime.getWsTimestampTmMm()));
-        sb.append(FieldFormat.format(1, wsDateTime.getFiller5()));
-        sb.append(FieldFormat.format(2, wsDateTime.getWsTimestampTmSs()));
-        sb.append(FieldFormat.format(1, wsDateTime.getFiller6()));
-        sb.append(FieldFormat.format(6, wsDateTime.getWsTimestampTmMs6()));
+        sb.append(FieldFormat.format(4, wsDateTime.getWsTimestampDtYyyy(), wsVariables.getWsRespCd()));
+        sb.append(FieldFormat.format(1, wsDateTime.getFiller1OfWsTimestamp(), wsVariables.getWsRespCd()));
+        sb.append(FieldFormat.format(2, wsDateTime.getWsTimestampDtMm(), wsVariables.getWsRespCd()));
+        sb.append(FieldFormat.format(1, wsDateTime.getFiller2OfWsTimestamp(), wsVariables.getWsRespCd()));
+        sb.append(FieldFormat.format(2, wsDateTime.getWsTimestampDtDd(), wsVariables.getWsRespCd()));
+        sb.append(FieldFormat.format(1, wsDateTime.getFiller3(), wsVariables.getWsRespCd()));
+        sb.append(FieldFormat.format(2, wsDateTime.getWsTimestampTmHh(), wsVariables.getWsRespCd()));
+        sb.append(FieldFormat.format(1, wsDateTime.getFiller4(), wsVariables.getWsRespCd()));
+        sb.append(FieldFormat.format(2, wsDateTime.getWsTimestampTmMm(), wsVariables.getWsRespCd()));
+        sb.append(FieldFormat.format(1, wsDateTime.getFiller5(), wsVariables.getWsRespCd()));
+        sb.append(FieldFormat.format(2, wsDateTime.getWsTimestampTmSs(), wsVariables.getWsRespCd()));
+        sb.append(FieldFormat.format(1, wsDateTime.getFiller6(), wsVariables.getWsRespCd()));
+        sb.append(FieldFormat.format(6, wsDateTime.getWsTimestampTmMs6(), wsVariables.getWsRespCd()));
         return sb.toString();
     }
 
 
     public static void setWsTimestamp(WsDateTime wsDateTime, String value) {
-        value = FieldFormat.format(26, value);
+        value = FieldFormat.format(26, value, wsVariables.getWsRespCd());
         wsDateTime.setWsTimestampDtYyyy(ValueUtil.toShort(value.substring(0, 4)));
         wsDateTime.setFiller1OfWsTimestamp(value.substring(4, 5));
         wsDateTime.setWsTimestampDtMm(ValueUtil.toShort(value.substring(5, 7)));
@@ -200,15 +202,15 @@ public class WsDateTime_Accessor {
 
     public static String getWsCurdate(WsDateTime wsDateTime) {
         StringBuilder sb = new StringBuilder();
-        sb.append(FieldFormat.format(4, wsDateTime.getWsCurdateYear()));
-        sb.append(FieldFormat.format(2, wsDateTime.getWsCurdateMonth()));
-        sb.append(FieldFormat.format(2, wsDateTime.getWsCurdateDay()));
+        sb.append(FieldFormat.format(4, wsDateTime.getWsCurdateYear(), wsVariables.getWsRespCd()));
+        sb.append(FieldFormat.format(2, wsDateTime.getWsCurdateMonth(), wsVariables.getWsRespCd()));
+        sb.append(FieldFormat.format(2, wsDateTime.getWsCurdateDay(), wsVariables.getWsRespCd()));
         return sb.toString();
     }
 
 
     public static void setWsCurdate(WsDateTime wsDateTime, String value) {
-        value = FieldFormat.format(8, value);
+        value = FieldFormat.format(8, value, wsVariables.getWsRespCd());
         wsDateTime.setWsCurdateYear(ValueUtil.toShort(value.substring(0, 4)));
         wsDateTime.setWsCurdateMonth(ValueUtil.toShort(value.substring(4, 6)));
         wsDateTime.setWsCurdateDay(ValueUtil.toShort(value.substring(6, 8)));
@@ -223,12 +225,12 @@ public class WsDateTime_Accessor {
 
 
     public static int getWsCurdateN(WsDateTime wsDateTime) {
-        return WsDateTime_Accessor.getWsDateTime(wsDateTime);
+        return Integer.parseInt(WsDateTime_Accessor.getWsDateTime(wsDateTime));
     }
 
 
     public static void setWsCurdateN(WsDateTime wsDateTime, int value) {
-        WsDateTime_Accessor.setWsCurdate(wsDateTime, FieldFormat.format(8, value));
+        WsDateTime_Accessor.setWsCurdate(wsDateTime, FieldFormat.format(8, value, wsVariables.getWsRespCd()));
     }
 
 
@@ -239,16 +241,16 @@ public class WsDateTime_Accessor {
 
     public static String getWsCurtime(WsDateTime wsDateTime) {
         StringBuilder sb = new StringBuilder();
-        sb.append(FieldFormat.format(2, wsDateTime.getWsCurtimeHours()));
-        sb.append(FieldFormat.format(2, wsDateTime.getWsCurtimeMinute()));
-        sb.append(FieldFormat.format(2, wsDateTime.getWsCurtimeSecond()));
-        sb.append(FieldFormat.format(2, wsDateTime.getWsCurtimeMilsec()));
+        sb.append(FieldFormat.format(2, wsDateTime.getWsCurtimeHours(), wsVariables.getWsRespCd()));
+        sb.append(FieldFormat.format(2, wsDateTime.getWsCurtimeMinute(), wsVariables.getWsRespCd()));
+        sb.append(FieldFormat.format(2, wsDateTime.getWsCurtimeSecond(), wsVariables.getWsRespCd()));
+        sb.append(FieldFormat.format(2, wsDateTime.getWsCurtimeMilsec(), wsVariables.getWsRespCd()));
         return sb.toString();
     }
 
 
     public static void setWsCurtime(WsDateTime wsDateTime, String value) {
-        value = FieldFormat.format(8, value);
+        value = FieldFormat.format(8, value, wsVariables.getWsRespCd());
         wsDateTime.setWsCurtimeHours(ValueUtil.toShort(value.substring(0, 2)));
         wsDateTime.setWsCurtimeMinute(ValueUtil.toShort(value.substring(2, 4)));
         wsDateTime.setWsCurtimeSecond(ValueUtil.toShort(value.substring(4, 6)));
@@ -265,12 +267,12 @@ public class WsDateTime_Accessor {
 
 
     public static int getWsCurtimeN(WsDateTime wsDateTime) {
-        return WsDateTime_Accessor.getWsDateTime(wsDateTime);
+        return Integer.parseInt(WsDateTime_Accessor.getWsDateTime(wsDateTime));
     }
 
 
     public static void setWsCurtimeN(WsDateTime wsDateTime, int value) {
-        WsDateTime_Accessor.setWsCurtime(wsDateTime, FieldFormat.format(8, value));
+        WsDateTime_Accessor.setWsCurtime(wsDateTime, FieldFormat.format(8, value, wsVariables.getWsRespCd()));
     }
 
 
