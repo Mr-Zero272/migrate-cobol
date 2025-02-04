@@ -1,6 +1,5 @@
 package com.group_imposter.migrate.model;
 
-import com.group_imposter.migrate.constant.ValueConst;
 import lombok.Getter;
 import lombok.Setter;
 
