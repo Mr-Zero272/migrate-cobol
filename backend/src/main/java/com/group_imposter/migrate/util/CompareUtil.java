@@ -1,7 +1,7 @@
 package com.group_imposter.migrate.util;
 
-import constants.CompareResultConstant;
-import constants.ValueConst;
+import com.group_imposter.migrate.constant.CompareResultConstant;
+import com.group_imposter.migrate.constant.ValueConst;
 
 public class CompareUtil {
     public static boolean eq(String str1, String str2) {

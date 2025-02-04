@@ -2,7 +2,6 @@ package com.group_imposter.migrate.util;
 
 import java.math.BigDecimal;
 
-import exception.InvalidFormatException;
 
 public class ValueUtil {
 
@@ -30,7 +29,7 @@ public class ValueUtil {
      * @param lengthAfterDot
      * @param sValue
      * @return
-     * @throws InvalidFormatException
+//     * @throws InvalidFormatException
      */
     public static double toDouble(int lengthBeforeDot, int lengthAfterDot, String sValue) {
         BigDecimal value = toBigDecimal(lengthBeforeDot, lengthAfterDot, sValue);
@@ -45,7 +44,7 @@ public class ValueUtil {
      * @param lengthAfterDot
      * @param sValue
      * @return
-     * @throws InvalidFormatException
+//     * @throws InvalidFormatException
      */
     public static BigDecimal toBigDecimal(int lengthBeforeDot, int lengthAfterDot, String sValue) {
         if (sValue.length() > (lengthBeforeDot + lengthAfterDot)) {

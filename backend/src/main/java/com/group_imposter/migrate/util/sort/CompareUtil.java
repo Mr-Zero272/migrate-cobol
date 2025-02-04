@@ -1,10 +1,12 @@
 package com.group_imposter.migrate.util.sort;
 
+import com.group_imposter.migrate.constant.CompareResultConstant;
+import com.group_imposter.migrate.util.StringUtil;
+
 import java.math.BigDecimal;
 import java.math.BigInteger;
 
-import constants.CompareResultConstant;
-import util.StringUtil;
+
 
 class CompareUtil {
     protected static int compare(String key1, String key2, String sortType, DataType dataType) {

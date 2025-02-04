@@ -1,5 +1,7 @@
 package com.group_imposter.migrate.model;
 
+import com.group_imposter.migrate.constant.ValueConst;
+import com.group_imposter.migrate.util.FieldFormat;
 import lombok.Getter;
 import lombok.Setter;
 
