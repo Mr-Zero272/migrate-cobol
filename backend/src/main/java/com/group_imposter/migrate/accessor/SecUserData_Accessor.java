@@ -36,13 +36,6 @@ public class SecUserData_Accessor {
         secUserData.setSecUsrFiller(FieldFormat.format(23, ValueConst.SPACE));
     }
 
-    // Tạo dòng dữ liệu cố định để thêm vào file
-    public static String generateSecUserDataRecord(SecUserData secUserData) {
-        String line = secUserData.getSecUsrId() + secUserData.getSecUsrFname() + secUserData.getSecUsrLname() + secUserData.getSecUsrPwd() + secUserData.getSecUsrType() + secUserData.getSecUsrFiller();
-
-        return  line;
-    }
-
     // Trích xuất User ID
     public static String extractUserId(String line) {
         return line.substring(0, 8).trim(); // SEC-USR-ID (8 ký tự)

@@ -82,7 +82,8 @@ public class SecUserSeviceImpl implements SecUserService {
         FileAccessBase userSecFile = new FileAccessBase(filePath);
         userSecFile.open(FileOpenMode.OUT);
 
-        userSecFile.write(SecUserData_Accessor.generateSecUserDataRecord(secUserData));
+        // get sercurity user data type sting line and write to file
+        userSecFile.write(SecUserData_Accessor.getSecUserData(secUserData));
 
         userSecFile.close();
 
