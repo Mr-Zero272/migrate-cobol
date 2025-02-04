@@ -33,9 +33,4 @@ public class SecUserData {
     secUsrType = ValueConst.SPACE;
     secUsrFiller = FieldFormat.format(23, ValueConst.SPACE);
   }
-
-  // Tạo dòng dữ liệu cố định để thêm vào file
-  public String generateRecord() {
-    return secUsrId + secUsrFname + secUsrLname + secUsrPwd + secUsrType + secUsrFiller;
-  }
 }

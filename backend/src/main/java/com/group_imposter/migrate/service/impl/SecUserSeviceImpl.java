@@ -1,5 +1,6 @@
 package com.group_imposter.migrate.service.impl;
 
+import com.group_imposter.migrate.accessor.SecUserData_Accessor;
 import com.group_imposter.migrate.dto.request.SecUserDataRequestDto;
 import com.group_imposter.migrate.dto.response.ResponseObject;
 import com.group_imposter.migrate.file.FileAccessBase;
@@ -40,7 +41,7 @@ public class SecUserSeviceImpl implements SecUserService {
         while (!isEOF) {
             userSecFile.readLine();
 
-            if (this.extractUserId(userSecFile.getCurrentLine()).equals(userId)) {
+            if (SecUserData_Accessor.extractUserId(userSecFile.getCurrentLine()).equals(userId)) {
                 return true;
             }
 
@@ -81,7 +82,7 @@ public class SecUserSeviceImpl implements SecUserService {
         FileAccessBase userSecFile = new FileAccessBase(filePath);
         userSecFile.open(FileOpenMode.OUT);
 
-        userSecFile.write(secUserData.generateRecord());
+        userSecFile.write(SecUserData_Accessor.generateSecUserDataRecord(secUserData));
 
         userSecFile.close();
 
@@ -91,30 +92,5 @@ public class SecUserSeviceImpl implements SecUserService {
         responseObject.setData(secUserData);
 
         return responseObject;
-    }
-
-    // Trích xuất User ID
-    private String extractUserId(String line) {
-        return line.substring(0, 8).trim(); // SEC-USR-ID (8 ký tự)
-    }
-
-    // Trích xuất First Name
-    private String extractFirstName(String line) {
-        return line.substring(8, 28).trim(); // SEC-USR-FNAME (20 ký tự)
-    }
-
-    // Trích xuất Last Name
-    private String extractLastName(String line) {
-        return line.substring(28, 48).trim(); // SEC-USR-LNAME (20 ký tự)
-    }
-
-    // Trích xuất Password
-    private String extractPassword(String line) {
-        return line.substring(48, 56).trim();  // SEC-USR-PWD (8 ký tự)
-    }
-
-    // Trích xuất User Type
-    private String extractUserType(String line) {
-        return line.substring(56, 57).trim(); // SEC-USR-TYPE (1 ký tự)
     }
 }

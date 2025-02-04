@@ -27,7 +27,6 @@ public class SecUserData_Accessor {
         secUserData.setSecUsrFiller(value.substring(57, 80));
     }
 
-
     public static void initializeSecUserData(SecUserData secUserData){
         secUserData.setSecUsrId(FieldFormat.format(8, ValueConst.SPACE));
         secUserData.setSecUsrFname(FieldFormat.format(20, ValueConst.SPACE));
@@ -36,5 +35,36 @@ public class SecUserData_Accessor {
         secUserData.setSecUsrType(ValueConst.SPACE);
         secUserData.setSecUsrFiller(FieldFormat.format(23, ValueConst.SPACE));
     }
-//
+
+    // Tạo dòng dữ liệu cố định để thêm vào file
+    public static String generateSecUserDataRecord(SecUserData secUserData) {
+        String line = secUserData.getSecUsrId() + secUserData.getSecUsrFname() + secUserData.getSecUsrLname() + secUserData.getSecUsrPwd() + secUserData.getSecUsrType() + secUserData.getSecUsrFiller();
+
+        return  line;
+    }
+
+    // Trích xuất User ID
+    public static String extractUserId(String line) {
+        return line.substring(0, 8).trim(); // SEC-USR-ID (8 ký tự)
+    }
+
+    // Trích xuất First Name
+    public static String extractFirstName(String line) {
+        return line.substring(8, 28).trim(); // SEC-USR-FNAME (20 ký tự)
+    }
+
+    // Trích xuất Last Name
+    public static String extractLastName(String line) {
+        return line.substring(28, 48).trim(); // SEC-USR-LNAME (20 ký tự)
+    }
+
+    // Trích xuất Password
+    public static String extractPassword(String line) {
+        return line.substring(48, 56).trim();  // SEC-USR-PWD (8 ký tự)
+    }
+
+    // Trích xuất User Type
+    public static String extractUserType(String line) {
+        return line.substring(56, 57).trim(); // SEC-USR-TYPE (1 ký tự)
+    }
 }
