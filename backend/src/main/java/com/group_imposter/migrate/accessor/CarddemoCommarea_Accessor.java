@@ -8,7 +8,6 @@ import com.group_imposter.migrate.util.ValueUtil;
 
 public class CarddemoCommarea_Accessor {
 
-
     public static String getCarddemoCommarea(CarddemoCommarea carddemoCommarea){
         StringBuilder sb = new StringBuilder();
         sb.append(FieldFormat.format(4, carddemoCommarea.getCdemoFromTranid()));
