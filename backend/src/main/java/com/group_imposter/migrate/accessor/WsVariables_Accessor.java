@@ -8,6 +8,9 @@ import com.group_imposter.migrate.util.ValueUtil;
 
 public class WsVariables_Accessor {
 
+
+
+
     public static String getWsVariables(WsVariables wsVariables){
         StringBuilder sb = new StringBuilder();
         sb.append(FieldFormat.format(8, wsVariables.getWsPgmname()));
