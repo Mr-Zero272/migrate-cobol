@@ -27,6 +27,7 @@ public class SecUserData_Accessor {
         secUserData.setSecUsrFiller(value.substring(57, 80));
     }
 
+
     public static void initializeSecUserData(SecUserData secUserData){
         secUserData.setSecUsrId(FieldFormat.format(8, ValueConst.SPACE));
         secUserData.setSecUsrFname(FieldFormat.format(20, ValueConst.SPACE));
@@ -35,11 +36,11 @@ public class SecUserData_Accessor {
         secUserData.setSecUsrType(ValueConst.SPACE);
         secUserData.setSecUsrFiller(FieldFormat.format(23, ValueConst.SPACE));
     }
-
-    // Trích xuất User ID
-    public static String extractUserId(String line) {
-        return line.substring(0, 8).trim(); // SEC-USR-ID (8 ký tự)
-    }
+//
+// Trích xuất User ID
+public static String extractUserId(String line) {
+    return line.substring(0, 8).trim(); // SEC-USR-ID (8 ký tự)
+}
 
     // Trích xuất First Name
     public static String extractFirstName(String line) {
