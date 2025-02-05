@@ -5,6 +5,7 @@ import com.group_imposter.migrate.dto.response.ResponseObject;
 import com.group_imposter.migrate.service.SecUserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,7 +18,8 @@ public class SecUserDataController {
     private SecUserService secUserService;
 
     @PostMapping
-    ResponseObject addNewSecUserData(@RequestBody @Valid SecUserDataRequestDto requestDto) {
-        return secUserService.addNewSecUserData(requestDto);
+    ResponseEntity<ResponseObject> addNewSecUserData(@RequestBody @Valid SecUserDataRequestDto requestDto) {
+        ResponseObject responseObject = secUserService.addNewSecUserData(requestDto);
+        return new ResponseEntity<>(responseObject, responseObject.getHttpStatus());
     }
 }

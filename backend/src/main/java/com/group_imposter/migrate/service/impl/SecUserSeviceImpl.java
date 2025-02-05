@@ -9,30 +9,17 @@ import com.group_imposter.migrate.model.SecUserData;
 import com.group_imposter.migrate.service.SecUserService;
 import com.group_imposter.migrate.util.FieldFormat;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
 
 @Service
 public class SecUserSeviceImpl implements SecUserService {
-    String filePath = "src/main/java/com/group_imposter/migrate/data/user-security.txt";
+    String filePath = "E:\\cobol_fosft_training\\migrate-cobol\\backend\\src\\main\\java\\com\\group_imposter\\migrate\\data\\user-security.txt";
 
     @Override
     public boolean doesUserIdExist(String userId) {
-//        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
-//            String line;
-//            while ((line = br.readLine()) != null) {
-//                String existingUserId = this.extractUserId(line);
-//                if (existingUserId.equals(userId)) {
-//                    return true;
-//                }
-//            }
-//        } catch (IOException e) {
-//            throw new RuntimeException("Error when reading file");
-//        }
-//
-//        return false;
-
         FileAccessBase userSecFile = new FileAccessBase(filePath);
         userSecFile.open(FileOpenMode.IN);
 
@@ -55,9 +42,8 @@ public class SecUserSeviceImpl implements SecUserService {
 
     @Override
     public ResponseObject addNewSecUserData(SecUserDataRequestDto requestDto) {
-        // validate USER-TYPE (refactor later)
         if (!requestDto.getSecUsrType().equalsIgnoreCase("A") && !requestDto.getSecUsrType().equalsIgnoreCase("U")) {
-            throw new RuntimeException("User type must be A or U");
+            return ResponseObject.builder().httpStatus(HttpStatus.BAD_REQUEST).message("User type must be A or U").build();
         }
 
         SecUserData secUserData = new SecUserData();
@@ -69,15 +55,8 @@ public class SecUserSeviceImpl implements SecUserService {
         secUserData.setSecUsrType(requestDto.getSecUsrType().toUpperCase());
 
         if (doesUserIdExist(secUserData.getSecUsrId())) {
-            throw new RuntimeException("User ID already exist...");
+            return ResponseObject.builder().httpStatus(HttpStatus.BAD_REQUEST).message("User ID already exist...").build();
         }
-
-//        try (BufferedWriter bw = new BufferedWriter(new FileWriter(filePath, true))) {
-//            bw.write(secUserData.generateRecord());
-//            bw.newLine();
-//        } catch (IOException e) {
-//            throw new RuntimeException("Unable to Add User...");
-//        }
 
         FileAccessBase userSecFile = new FileAccessBase(filePath);
         userSecFile.open(FileOpenMode.OUT);
@@ -87,11 +66,6 @@ public class SecUserSeviceImpl implements SecUserService {
 
         userSecFile.close();
 
-        ResponseObject responseObject = new ResponseObject();
-        responseObject.setHttpStatus(HttpStatus.CREATED);
-        responseObject.setMessage("User " + secUserData.getSecUsrId() + " has been added ...");
-        responseObject.setData(secUserData);
-
-        return responseObject;
+        return ResponseObject.builder().httpStatus(HttpStatus.CREATED).message("User " + secUserData.getSecUsrId() + " has been added ...").data(secUserData).build();
     }
 }
