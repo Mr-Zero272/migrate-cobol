@@ -1,5 +1,6 @@
 package com.group_imposter.migrate.service;
 
+import com.group_imposter.migrate.dto.request.GetByIDUserDataRequestDto;
 import com.group_imposter.migrate.dto.request.SecUserDataRequestDto;
 import com.group_imposter.migrate.dto.response.ResponseObject;
 
@@ -9,4 +10,6 @@ public interface SecUserService {
   ResponseObject addNewSecUserData(SecUserDataRequestDto requestDto);
 
   ResponseObject updateSecUserData(SecUserDataRequestDto requestDto);
+
+  ResponseObject getByIdSecUserData(GetByIDUserDataRequestDto getByIdUser);
 }

@@ -1,5 +1,6 @@
 package com.group_imposter.migrate.controller;
 
+import com.group_imposter.migrate.dto.request.GetByIDUserDataRequestDto;
 import com.group_imposter.migrate.dto.request.SecUserDataRequestDto;
 import com.group_imposter.migrate.dto.response.ResponseObject;
 import com.group_imposter.migrate.service.SecUserService;
@@ -26,10 +27,9 @@ public class SecUserDataController {
     return new ResponseEntity<>(respone, respone.getHttpStatus());
   }
 
-
-//  @PutMapping
-//  ResponseObject updateSecUserData(@RequestBody @Valid SecUserDataRequestDto requestDto) {
-//    return new ;
-////    return secUserService.updateSecUserData(requestDto);
-//  }
+  @PostMapping("/get-by-id")
+  public ResponseEntity<ResponseObject> getByIdSecUserData(@RequestBody @Valid GetByIDUserDataRequestDto getByIdUser) {
+    ResponseObject respone = secUserService.getByIdSecUserData(getByIdUser);
+    return new ResponseEntity<>(respone, respone.getHttpStatus());
+  }
 }

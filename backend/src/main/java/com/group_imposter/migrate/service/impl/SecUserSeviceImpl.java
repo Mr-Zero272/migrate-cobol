@@ -1,6 +1,7 @@
 package com.group_imposter.migrate.service.impl;
 
 import com.group_imposter.migrate.accessor.SecUserData_Accessor;
+import com.group_imposter.migrate.dto.request.GetByIDUserDataRequestDto;
 import com.group_imposter.migrate.dto.request.SecUserDataRequestDto;
 import com.group_imposter.migrate.dto.response.ResponseObject;
 import com.group_imposter.migrate.file.FileAccessBase;
@@ -39,6 +40,36 @@ public class SecUserSeviceImpl implements SecUserService {
     return false;
 
   }
+
+
+  @Override
+  public ResponseObject getByIdSecUserData(GetByIDUserDataRequestDto getByIDUserDataRequestDto) {
+    FileAccessBase userSecFile = new FileAccessBase(filePath);
+    userSecFile.open(FileOpenMode.IN);
+    boolean isEOF = false;
+
+    while (!isEOF) {
+      userSecFile.readLine();
+      if (SecUserData_Accessor.extractUserId(userSecFile.getCurrentLine()).equals(getByIDUserDataRequestDto.getSecUsrId())) {
+        SecUserData secUserData = new SecUserData();
+        SecUserData_Accessor.setSecUserData(secUserData, userSecFile.getCurrentLine());
+        return ResponseObject.builder()
+                .status("success")
+                .httpStatus(HttpStatus.OK)
+                .message("Press PF5 key to save your updates ...")
+                .data(secUserData)
+                .build();
+      }
+      isEOF = userSecFile.isEOF();
+    }
+
+    return ResponseObject.builder()
+            .status("error")
+            .httpStatus(HttpStatus.NOT_FOUND)
+            .message("User ID NOT found...")
+            .build();
+  }
+
 
   @Override
   public ResponseObject addNewSecUserData(SecUserDataRequestDto requestDto) {
