@@ -11,87 +11,127 @@ import com.group_imposter.migrate.util.FieldFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import java.io.*;
+import java.io.File;
 
 @Service
 public class SecUserSeviceImpl implements SecUserService {
-    String filePath = "src/main/java/com/group_imposter/migrate/data/user-security.txt";
+  String filePath = "src/main/java/com/group_imposter/migrate/data/user-security.txt";
 
-    @Override
-    public boolean doesUserIdExist(String userId) {
-//        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
-//            String line;
-//            while ((line = br.readLine()) != null) {
-//                String existingUserId = this.extractUserId(line);
-//                if (existingUserId.equals(userId)) {
-//                    return true;
-//                }
-//            }
-//        } catch (IOException e) {
-//            throw new RuntimeException("Error when reading file");
-//        }
-//
-//        return false;
+  @Override
+  public boolean doesUserIdExist(String userId) {
 
-        FileAccessBase userSecFile = new FileAccessBase(filePath);
-        userSecFile.open(FileOpenMode.IN);
+    FileAccessBase userSecFile = new FileAccessBase(filePath);
+    userSecFile.open(FileOpenMode.IN);
 
-        boolean isEOF = false;
+    boolean isEOF = false;
 
-        while (!isEOF) {
-            userSecFile.readLine();
+    while (!isEOF) {
+      userSecFile.readLine();
 
-            if (SecUserData_Accessor.extractUserId(userSecFile.getCurrentLine()).equals(userId)) {
-                return true;
-            }
+      if (SecUserData_Accessor.extractUserId(userSecFile.getCurrentLine()).equals(userId)) {
+        return true;
+      }
 
-            isEOF = userSecFile.isEOF();
-        }
-
-        userSecFile.close();
-        return false;
-
+      isEOF = userSecFile.isEOF();
     }
 
-    @Override
-    public ResponseObject addNewSecUserData(SecUserDataRequestDto requestDto) {
-        // validate USER-TYPE (refactor later)
-        if (!requestDto.getSecUsrType().equalsIgnoreCase("A") && !requestDto.getSecUsrType().equalsIgnoreCase("U")) {
-            throw new RuntimeException("User type must be A or U");
-        }
+    userSecFile.close();
+    return false;
 
-        SecUserData secUserData = new SecUserData();
+  }
 
-        secUserData.setSecUsrId(requestDto.getSecUsrId().toUpperCase());
-        secUserData.setSecUsrFname(FieldFormat.format(20, requestDto.getSecUsrFname()).toUpperCase());
-        secUserData.setSecUsrLname(FieldFormat.format(20, requestDto.getSecUsrLname()).toUpperCase());
-        secUserData.setSecUsrPwd(requestDto.getSecUsrPwd().toUpperCase());
-        secUserData.setSecUsrType(requestDto.getSecUsrType().toUpperCase());
-
-        if (doesUserIdExist(secUserData.getSecUsrId())) {
-            throw new RuntimeException("User ID already exist...");
-        }
-
-//        try (BufferedWriter bw = new BufferedWriter(new FileWriter(filePath, true))) {
-//            bw.write(secUserData.generateRecord());
-//            bw.newLine();
-//        } catch (IOException e) {
-//            throw new RuntimeException("Unable to Add User...");
-//        }
-
-        FileAccessBase userSecFile = new FileAccessBase(filePath);
-        userSecFile.open(FileOpenMode.OUT);
-
-        // get sercurity user data type sting line and write to file
-        userSecFile.write(SecUserData_Accessor.getSecUserData(secUserData));
-
-        userSecFile.close();
-
-        ResponseObject responseObject = new ResponseObject();
-        responseObject.setHttpStatus(HttpStatus.CREATED);
-        responseObject.setMessage("User " + secUserData.getSecUsrId() + " has been added ...");
-        responseObject.setData(secUserData);
-
-        return responseObject;
+  @Override
+  public ResponseObject addNewSecUserData(SecUserDataRequestDto requestDto) {
+    if (!requestDto.getSecUsrType().equalsIgnoreCase("A") && !requestDto.getSecUsrType().equalsIgnoreCase("U")) {
+      throw new RuntimeException("User type must be A or U");
     }
+
+    SecUserData secUserData = new SecUserData();
+
+    secUserData.setSecUsrId(requestDto.getSecUsrId().toUpperCase());
+    secUserData.setSecUsrFname(FieldFormat.format(20, requestDto.getSecUsrFname()).toUpperCase());
+    secUserData.setSecUsrLname(FieldFormat.format(20, requestDto.getSecUsrLname()).toUpperCase());
+    secUserData.setSecUsrPwd(requestDto.getSecUsrPwd().toUpperCase());
+    secUserData.setSecUsrType(requestDto.getSecUsrType().toUpperCase());
+
+    if (doesUserIdExist(secUserData.getSecUsrId())) {
+      throw new RuntimeException("User ID already exist...");
+    }
+
+    FileAccessBase userSecFile = new FileAccessBase(filePath);
+    userSecFile.open(FileOpenMode.OUT);
+    userSecFile.write(SecUserData_Accessor.getSecUserData(secUserData));
+    userSecFile.close();
+    ResponseObject responseObject = new ResponseObject();
+    responseObject.setHttpStatus(HttpStatus.CREATED);
+    responseObject.setMessage("User " + secUserData.getSecUsrId() + " has been added ...");
+    responseObject.setData(secUserData);
+
+    return responseObject;
+  }
+
+
+  @Override
+  public ResponseObject updateSecUserData(SecUserDataRequestDto requestDto) {
+    if (!requestDto.getSecUsrType().equalsIgnoreCase("A") && !requestDto.getSecUsrType().equalsIgnoreCase("U")) {
+      throw new RuntimeException("User type must be A or U");
+    }
+
+    FileAccessBase userSecFile = new FileAccessBase(filePath);
+    userSecFile.open(FileOpenMode.IN);
+
+    StringBuilder fileContent = new StringBuilder();
+    boolean userUpdated = false;
+
+    while (!userSecFile.isEOF()) {
+      userSecFile.readLine();
+      String currentLine = userSecFile.getCurrentLine();
+      if (currentLine == null || currentLine.isEmpty()) continue;
+      String existingUserId = SecUserData_Accessor.extractUserId(currentLine);
+      if (existingUserId.equals(requestDto.getSecUsrId())) {
+        userUpdated = true;
+      } else {
+        fileContent.append(currentLine).append("\n");
+      }
+    }
+    userSecFile.close();
+
+    if (!userUpdated) {
+      return ResponseObject.builder()
+              .status("error")
+              .httpStatus(HttpStatus.NOT_FOUND)
+              .message("User ID NOT found...")
+              .build();
+    }
+
+    SecUserData updatedUserData = new SecUserData();
+    updatedUserData.setSecUsrId(requestDto.getSecUsrId().toUpperCase());
+    updatedUserData.setSecUsrFname(FieldFormat.format(20, requestDto.getSecUsrFname()).toUpperCase());
+    updatedUserData.setSecUsrLname(FieldFormat.format(20, requestDto.getSecUsrLname()).toUpperCase());
+    updatedUserData.setSecUsrPwd(requestDto.getSecUsrPwd().toUpperCase());
+    updatedUserData.setSecUsrType(requestDto.getSecUsrType().toUpperCase());
+
+    fileContent.append(SecUserData_Accessor.getSecUserData(updatedUserData)).append("\n");
+
+    File file = new File(filePath);
+    if (file.exists()) {
+      file.delete();
+    }
+
+    FileAccessBase userSecFileOut = new FileAccessBase(filePath);
+    userSecFileOut.open(FileOpenMode.OUT);
+    userSecFileOut.write(fileContent.toString().trim());
+    userSecFileOut.close();
+
+    return ResponseObject.builder()
+            .status("success")
+            .httpStatus(HttpStatus.OK)
+            .message("Updated user successfully")
+            .build();
+  }
+
 }
+
+
+
+
