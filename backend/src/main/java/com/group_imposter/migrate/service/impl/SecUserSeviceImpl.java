@@ -21,7 +21,7 @@ import java.util.List;
 
 @Service
 public class SecUserSeviceImpl  implements SecUserService {
-    String filePath = "src/main/java/com/group_imposter/migrate/data/user-security.txt";
+    String filePath = "E:\\cobol_fosft_training\\migrate-cobol\\backend\\src\\main\\java\\com\\group_imposter\\migrate\\data\\user-security.txt";
 
 
     @Override
@@ -49,9 +49,8 @@ public class SecUserSeviceImpl  implements SecUserService {
     public ResponseObject getByIdSecUserData(GetByIDUserDataRequestDto getByIDUserDataRequestDto) {
         FileAccessBase userSecFile = new FileAccessBase(filePath);
         userSecFile.open(FileOpenMode.IN);
-        boolean isEOF = false;
 
-        while (!isEOF) {
+        while (!userSecFile.isEOF()) {
             userSecFile.readLine();
             if (SecUserData_Accessor.extractUserId(userSecFile.getCurrentLine()).equals(getByIDUserDataRequestDto.getSecUsrId())) {
                 SecUserData secUserData = new SecUserData();
@@ -63,7 +62,6 @@ public class SecUserSeviceImpl  implements SecUserService {
                         .data(secUserData)
                         .build();
             }
-            isEOF = userSecFile.isEOF();
         }
 
         return ResponseObject.builder()
@@ -194,22 +192,21 @@ public class SecUserSeviceImpl  implements SecUserService {
         userSecFile.open(FileOpenMode.IN);
 
         StringBuilder fileContent = new StringBuilder();
-        boolean userUpdated = false;
+        boolean haveUserUpdated = false;
 
         while (!userSecFile.isEOF()) {
             userSecFile.readLine();
             String currentLine = userSecFile.getCurrentLine();
-            if (currentLine == null || currentLine.isEmpty()) continue;
-            String existingUserId = SecUserData_Accessor.extractUserId(currentLine);
-            if (existingUserId.equals(requestDto.getSecUsrId())) {
-                userUpdated = true;
+            String secUserId = SecUserData_Accessor.extractUserId(currentLine);
+            if (secUserId.equals(requestDto.getSecUsrId())) {
+                haveUserUpdated = true;
             } else {
                 fileContent.append(currentLine).append("\n");
             }
         }
         userSecFile.close();
 
-        if (!userUpdated) {
+        if (!haveUserUpdated) {
             return ResponseObject.builder()
                     .status("error")
                     .httpStatus(HttpStatus.NOT_FOUND)
@@ -227,14 +224,16 @@ public class SecUserSeviceImpl  implements SecUserService {
         fileContent.append(SecUserData_Accessor.getSecUserData(updatedUserData)).append("\n");
 
         File file = new File(filePath);
-        if (file.exists()) {
-            file.delete();
-        }
 
-        FileAccessBase userSecFileOut = new FileAccessBase(filePath);
-        userSecFileOut.open(FileOpenMode.OUT);
-        userSecFileOut.write(fileContent.toString().trim());
-        userSecFileOut.close();
+        if (file.exists()) {
+            if (file.delete()) {
+                FileAccessBase userSecFileOut = new FileAccessBase(filePath);
+                userSecFileOut.createNewFile();
+                userSecFileOut.open(FileOpenMode.OUT);
+                userSecFileOut.write(fileContent.toString().trim());
+                userSecFileOut.close();
+            }
+        }
 
         return ResponseObject.builder()
                 .status("success")

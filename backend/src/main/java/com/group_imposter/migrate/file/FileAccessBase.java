@@ -44,6 +44,33 @@ public class FileAccessBase {
         return filePath;
     }
 
+
+    /**
+     * Create a new file if it does not exist
+     *
+     * @return {@link FileStatusConstant}
+     */
+    public String createNewFile() {
+        try {
+            file = new File(filePath);
+            if (file.exists()) {
+                System.out.println("File already exists: " + filePath);
+                return FileStatusConstant.FAILED;
+            }
+            if (file.createNewFile()) {
+                System.out.println("File created successfully: " + filePath);
+                return FileStatusConstant.SUCCESS;
+            } else {
+                System.out.println("Failed to create file: " + filePath);
+                return FileStatusConstant.FAILED;
+            }
+        } catch (IOException e) {
+            System.out.println("Create file fail: " + e.getMessage());
+            return FileStatusConstant.FAILED;
+        }
+    }
+
+
     /**
      * Open file in specific mode
      * 
