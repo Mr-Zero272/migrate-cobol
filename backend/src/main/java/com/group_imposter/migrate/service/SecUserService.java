@@ -5,10 +5,11 @@ import com.group_imposter.migrate.dto.request.SecUserDataRequestDto;
 import com.group_imposter.migrate.dto.response.ResponseObject;
 
 public interface SecUserService {
-    boolean doesUserIdExist(String userId);
-    ResponseObject addNewSecUserData(SecUserDataRequestDto requestDto);
-    ResponseObject deleteUser(String secUsrId);
-    ResponseObject updateSecUserData(SecUserDataRequestDto requestDto);
-    ResponseObject getByIdSecUserData(GetByIDUserDataRequestDto getByIdUser);
-}
+  boolean doesUserIdExist(String userId);
 
+  ResponseObject addNewSecUserData(SecUserDataRequestDto requestDto);
+
+  ResponseObject updateSecUserData(SecUserDataRequestDto requestDto);
+
+  ResponseObject getByIdSecUserData(GetByIDUserDataRequestDto getByIdUser);
+}

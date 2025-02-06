@@ -22,28 +22,48 @@ export default function Dashboard() {
       <Helmet>
         <title>Dashboard</title>
       </Helmet>
-      <GridItem row={2} col={1}>
+      <GridItem
+        row={2}
+        col={1}
+      >
         <p>IDM0190</p>
       </GridItem>
-      <GridItem row={2} col={31}>
+      <GridItem
+        row={2}
+        col={31}
+      >
         <p>{'<< Dashboard Screen >>'}</p>
       </GridItem>
-      <GridItem row={1} col={71}>
+      <GridItem
+        row={1}
+        col={71}
+      >
         <p>
           {dateFormat(currentDateTime)}
           <br />
           {timeFormat(currentDateTime)}
         </p>
       </GridItem>
-      <GridItem row={3} col={1} lineBreak>
+      <GridItem
+        row={3}
+        col={1}
+        lineBreak
+      >
         <></>
       </GridItem>
 
-      <GridItem row={5} col={6}>
+      <GridItem
+        row={5}
+        col={6}
+      >
         <p>Put the page content here</p>
       </GridItem>
 
-      <GridItem row={23} col={1} lineBreak>
+      <GridItem
+        row={23}
+        col={1}
+        lineBreak
+      >
         <></>
       </GridItem>
     </>

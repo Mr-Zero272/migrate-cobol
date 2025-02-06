@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="ef77a872-f711-421c-b7c0-9e6df8a84fb8" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/jarRepositories.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/migrate-cobol.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/group_imposter/migrate/controller/SecUserDataController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/group_imposter/migrate/controller/SecUserDataController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/group_imposter/migrate/data/user-security.txt" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/group_imposter/migrate/data/user-security.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/group_imposter/migrate/dto/request/GetByIDUserDataRequestDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/group_imposter/migrate/dto/request/GetByIDUserDataRequestDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/group_imposter/migrate/file/FileAccessBase.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/group_imposter/migrate/file/FileAccessBase.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/group_imposter/migrate/service/SecUserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/group_imposter/migrate/service/SecUserService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/group_imposter/migrate/service/impl/SecUserSeviceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/group_imposter/migrate/service/impl/SecUserSeviceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/pages/BMSPage/COACTUP.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/BMSPage/COACTUP.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/pages/BMSPage/COTRN02.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/BMSPage/COTRN02.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/pages/BMSPage/COUSR02.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/BMSPage/COUSR02.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/pages/Dashboard/Dashboard.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/Dashboard/Dashboard.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/vite.config.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/vite.config.ts" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Interface" />
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/backend/src/main/java/com/group_imposter/migrate/data/user-security.txt" root0="FORCE_HIGHLIGHTING" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 8
+}</component>
+  <component name="ProjectId" id="2sYfr5R9pUeZcxDMSHn2OANkuJI" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.MigrateApplication.executor": "Run",
+    "Application.Unnamed.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "Merging duypt25",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "E:/cobol_fosft_training/migrate-cobol/backend",
+    "settings.editor.selected.configurable": "preferences.pluginManager"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="E:\cobol_fosft_training\migrate-cobol\backend\src\main\java\com\group_imposter\migrate\data" />
+    </key>
+  </component>
+  <component name="RunManager">
+    <configuration name="MigrateApplication" type="Application" factoryName="Application" nameIsGenerated="true">
+      <option name="ALTERNATIVE_JRE_PATH" value="C:/Program Files/Java/jdk-23" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
+      <option name="MAIN_CLASS_NAME" value="com.group_imposter.migrate.MigrateApplication" />
+      <module name="migrate" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="ef77a872-f711-421c-b7c0-9e6df8a84fb8" name="Changes" comment="" />
+      <created>1738637624521</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1738637624521</updated>
+    </task>
+    <servers />
+  </component>
+</project>
