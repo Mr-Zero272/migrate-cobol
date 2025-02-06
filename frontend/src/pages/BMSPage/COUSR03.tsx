@@ -62,10 +62,64 @@ errmsg: '',
         };
     });
     };
-
+    const resetForm = () => {
+        setFormData({
+            usridin: '',  // Reset lại input field
+         
+        });
+        setReceivedData({
+            cousr03: '',
+            cousr3a: '',
+            trnname: '',
+            title01: '',
+            curdate: 'mm/dd/yy',
+            pgmname: '',
+            title02: '',
+            curtime: 'hh:mm:ss',
+            fname: '',
+            lname: '',
+            usrtype: '',
+            errmsg: '',
+        });
+    
+     
+    };
+    
     const handleSubmit = async (event: KeyboardEvent<HTMLInputElement>) => {
-        if (event.key === 'Enter') {
+        if (event.key === 'F4') {
+            resetForm();
+            return;
+        }
+        if (event.key === 'F5') {
+            // Nếu chưa nhập User ID thì báo lỗi
+            event.preventDefault(); // Ngăn chặn tải lại trang
+            event.stopPropagation(); // Ngăn chặn sự kiện lan truyền
             const secUsrId = event.currentTarget.value.trim(); // Lấy giá trị từ input
+            if (!secUsrId) {
+                setErrorMessage("Please enter User ID to delete.");
+                return;
+            }
+            try {
+            
+                await axios.delete(`${httpConfig.domain}/sec-user-data/${secUsrId}`);
+                setErrorMessage("User deleted successfully.");
+                resetForm(); // Reset lại form sau khi xóa thành công
+    
+            } catch (error: any) {
+                console.error("Error deleting user:", error);
+    
+                if (error.response) {
+                    setErrorMessage(error.response.data.message || "Failed to delete user.");
+                } else {
+                    setErrorMessage("Server connection error, please try again!");
+                }
+            }
+    
+            return;
+        }
+    
+        if (event.key === 'Enter') {
+            const secUsrId = event.currentTarget.value.trim().toUpperCase(); // Lấy giá trị từ input
     
             if (!secUsrId) {
                 setErrorMessage("Please enter User Id");
@@ -80,7 +134,7 @@ errmsg: '',
     
             try {
                 const response = await axios.post(
-                    "http://localhost:8080/sec-user-data/get-by-id", // Không truyền ID trong URL
+                    `${httpConfig.domain}/sec-user-data/get-by-id`, // Không truyền ID trong URL
                     { secUsrId: secUsrId } // Truyền ID trong body
                 );
     
@@ -216,7 +270,7 @@ errmsg: '',
 
     
 <GridItem col={21} row={6}>
-    <Input maxLength={8} className='bms underLine' name='usridin' id='usridin' type='text' styles={{color:"green"}}  onChange={handleInputChange} onKeyDown={handleSubmit}/>
+    <Input maxLength={8} className='bms underLine' name='usridin' id='usridin' type='text' styles={{color:"green"}}     onChange={handleInputChange} onKeyDown={handleSubmit}/>
 </GridItem>
 
 <GridItem col={30} row={6}>
@@ -229,7 +283,7 @@ errmsg: '',
 <GridItem col={6} row={8}>
     <pre style={{color:"yellow"}}>
          ********************************************************************** 
-         <pre style={{ color: "red" }}>{errorMessage}</pre>
+      
     </pre>
 </GridItem>
 
@@ -297,9 +351,7 @@ errmsg: '',
 
     
 <GridItem col={1} row={23}>
-    <pre style={{color:"red"}}>
-         {receivedData.errmsg } 
-    </pre>
+    <pre style={{ color: "red" }}>{errorMessage}</pre>
 </GridItem>
 
     

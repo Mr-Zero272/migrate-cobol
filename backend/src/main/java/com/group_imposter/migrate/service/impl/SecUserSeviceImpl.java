@@ -21,7 +21,7 @@ import java.util.List;
 
 @Service
 public class SecUserSeviceImpl  implements SecUserService {
-    String filePath = "src/main/java/com/group_imposter/migrate/data/user-security.txt";
+    String filePath = "D:\\Master\\migrate-cobol\\backend\\src\\main\\java\\com\\group_imposter\\migrate\\data\\user-security.txt";
     @Override
     public ResponseObject getPageSecUserDate(int page) {
         List<SecUserData> secUserDataList = new ArrayList<>();
@@ -135,6 +135,8 @@ public class SecUserSeviceImpl  implements SecUserService {
 
         return ResponseObject.builder().httpStatus(HttpStatus.CREATED).message("User " + secUserData.getSecUsrId() + " has been added ...").data(secUserData).build();
     }
+
+
     @Override
     public ResponseObject deleteUser(String secUsrId) {
         FileAccessBase fileAccess = new FileAccessBase(filePath);
@@ -149,25 +151,21 @@ public class SecUserSeviceImpl  implements SecUserService {
         }
 
         List<String> lines = new ArrayList<>();
-        int originalLineCount = 0;
         boolean userFound = false;
 
-        // Đọc file và lọc dữ liệu
         while (!fileAccess.isEOF()) {
             fileAccess.readLine();
             String currentLine = fileAccess.getCurrentLine();
             if (currentLine != null) {
-                originalLineCount++;
                 if (!currentLine.startsWith(secUsrId)) {
-                    lines.add(currentLine);  // Giữ user lại nếu không trùng secUsrId
+                    lines.add(currentLine);
                 } else {
-                    userFound = true;  // Đánh dấu user đã được tìm thấy
+                    userFound = true;
                 }
             }
         }
         fileAccess.close();
 
-        // Kiểm tra xem user có tồn tại không
         if (!userFound) {
             return ResponseObject.builder()
                     .status("error")
@@ -176,17 +174,40 @@ public class SecUserSeviceImpl  implements SecUserService {
                     .build();
         }
 
-        // Xóa file hiện tại và tạo lại một file trống
         File file = new File(filePath);
-        if (file.exists()) {
-            file.delete();  // Xóa file cũ
+        if (!file.exists()) {
+            return ResponseObject.builder()
+                    .status("error")
+                    .httpStatus(HttpStatus.NOT_FOUND)
+                    .message("File không tồn tại.")
+                    .build();
         }
 
-        // Tạo lại file mới
+        // Thử xóa file nhiều lần nếu bị khóa
+        boolean deleted = false;
+        int retryCount = 0;
+        while (!deleted && retryCount < 5) {
+            System.gc(); // Giải phóng bộ nhớ để tránh khóa file
+            deleted = file.delete();
+            if (!deleted) {
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException ignored) {
+                }
+            }
+            retryCount++;
+        }
+
+        if (!deleted) {
+            return ResponseObject.builder()
+                    .status("error")
+                    .httpStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .message("Không thể xóa file cũ sau nhiều lần thử.")
+                    .build();
+        }
+
         try {
-            if (file.createNewFile()) {
-                System.out.println("File đã được tạo lại.");
-            } else {
+            if (!file.createNewFile()) {
                 return ResponseObject.builder()
                         .status("error")
                         .httpStatus(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -201,12 +222,30 @@ public class SecUserSeviceImpl  implements SecUserService {
                     .build();
         }
 
-        // Ghi lại file với danh sách user còn lại
+        if (lines.isEmpty()) {
+            return ResponseObject.builder()
+                    .status("success")
+                    .httpStatus(HttpStatus.OK)
+                    .message("User với secUsrId: " + secUsrId + " đã bị xóa. (File trống)")
+                    .build();
+        }
+
         fileAccess = new FileAccessBase(filePath);
-        fileAccess.open(FileOpenMode.OUT);
+        String openStatus = fileAccess.open(FileOpenMode.OUT);
+        if (!FileStatusConstant.SUCCESS.equals(openStatus)) {
+            return ResponseObject.builder()
+                    .status("error")
+                    .httpStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .message("Không thể mở file để ghi.")
+                    .build();
+        }
 
         for (String line : lines) {
-            fileAccess.write(line);  // Ghi lại các dòng còn lại
+            if (line != null && !line.trim().isEmpty()) {
+                fileAccess.write(line);
+            } else {
+                System.out.println("Bỏ qua dòng rỗng hoặc null...");
+            }
         }
         fileAccess.close();
 
@@ -217,32 +256,36 @@ public class SecUserSeviceImpl  implements SecUserService {
                 .build();
     }
 
+
     @Override
     public ResponseObject updateSecUserData(SecUserDataRequestDto requestDto) {
         if (!requestDto.getSecUsrType().equalsIgnoreCase("A") && !requestDto.getSecUsrType().equalsIgnoreCase("U")) {
-            throw new RuntimeException("User type must be A or U");
+            return ResponseObject.builder().httpStatus(HttpStatus.BAD_REQUEST).message("User type must be A or U").build();
         }
 
         FileAccessBase userSecFile = new FileAccessBase(filePath);
         userSecFile.open(FileOpenMode.IN);
 
         StringBuilder fileContent = new StringBuilder();
-        boolean userUpdated = false;
+        boolean isHaveUserUpdate = false;
+
+        SecUserData previousSecUserDataUpdate = new SecUserData();
 
         while (!userSecFile.isEOF()) {
             userSecFile.readLine();
             String currentLine = userSecFile.getCurrentLine();
             if (currentLine == null || currentLine.isEmpty()) continue;
-            String existingUserId = SecUserData_Accessor.extractUserId(currentLine);
-            if (existingUserId.equals(requestDto.getSecUsrId())) {
-                userUpdated = true;
+            String secUserId = SecUserData_Accessor.extractUserId(currentLine);
+            if (secUserId.equals(requestDto.getSecUsrId())) {
+                SecUserData_Accessor.setSecUserData(previousSecUserDataUpdate, currentLine);
+                isHaveUserUpdate = true;
             } else {
                 fileContent.append(currentLine).append("\n");
             }
         }
         userSecFile.close();
 
-        if (!userUpdated) {
+        if (!isHaveUserUpdate) {
             return ResponseObject.builder()
                     .status("error")
                     .httpStatus(HttpStatus.NOT_FOUND)
@@ -250,18 +293,43 @@ public class SecUserSeviceImpl  implements SecUserService {
                     .build();
         }
 
-        SecUserData updatedUserData = new SecUserData();
-        updatedUserData.setSecUsrId(requestDto.getSecUsrId().toUpperCase());
-        updatedUserData.setSecUsrFname(FieldFormat.format(20, requestDto.getSecUsrFname()).toUpperCase());
-        updatedUserData.setSecUsrLname(FieldFormat.format(20, requestDto.getSecUsrLname()).toUpperCase());
-        updatedUserData.setSecUsrPwd(requestDto.getSecUsrPwd().toUpperCase());
-        updatedUserData.setSecUsrType(requestDto.getSecUsrType().toUpperCase());
+        SecUserData newSecUserDataUpdate = new SecUserData();
+        newSecUserDataUpdate.setSecUsrId(requestDto.getSecUsrId().toUpperCase());
+        newSecUserDataUpdate.setSecUsrFname(FieldFormat.format(20, requestDto.getSecUsrFname()).toUpperCase());
+        newSecUserDataUpdate.setSecUsrLname(FieldFormat.format(20, requestDto.getSecUsrLname()).toUpperCase());
+        newSecUserDataUpdate.setSecUsrPwd(requestDto.getSecUsrPwd().toUpperCase());
+        newSecUserDataUpdate.setSecUsrType(requestDto.getSecUsrType().toUpperCase());
 
-        fileContent.append(SecUserData_Accessor.getSecUserData(updatedUserData)).append("\n");
+        if (!isUserDataModified(previousSecUserDataUpdate, newSecUserDataUpdate)) {
+            return ResponseObject.builder()
+                    .status("error")
+                    .httpStatus(HttpStatus.BAD_REQUEST)
+                    .message("Please modify to update ...")
+                    .build();
+        }
 
+        fileContent.append(SecUserData_Accessor.getSecUserData(newSecUserDataUpdate));
         File file = new File(filePath);
-        if (file.exists()) {
-            file.delete();
+        boolean deleted = false;
+        int retryCount = 0;
+        while (!deleted && retryCount < 5) {
+            System.gc();
+            deleted = file.delete();
+            if (!deleted) {
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException ignored) {
+                }
+            }
+            retryCount++;
+        }
+
+        if (!deleted) {
+            return ResponseObject.builder()
+                    .status("error")
+                    .httpStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .message("Cannot delete the old file after many trials")
+                    .build();
         }
 
         FileAccessBase userSecFileOut = new FileAccessBase(filePath);
@@ -275,5 +343,25 @@ public class SecUserSeviceImpl  implements SecUserService {
                 .message("Updated user successfully")
                 .build();
     }
+    public boolean isUserDataModified(SecUserData previousSecUserDataUpdate, SecUserData newSecuserDataUpdate) {
+        boolean usrModifiedFlg = false;
 
+        if (!previousSecUserDataUpdate.getSecUsrFname().equals(newSecuserDataUpdate.getSecUsrFname())) {
+            usrModifiedFlg = true;
+        }
+
+        if (!previousSecUserDataUpdate.getSecUsrLname().equals(newSecuserDataUpdate.getSecUsrLname())) {
+            usrModifiedFlg = true;
+        }
+
+        if (!previousSecUserDataUpdate.getSecUsrPwd().equals(newSecuserDataUpdate.getSecUsrPwd())) {
+            usrModifiedFlg = true;
+        }
+
+        if (!previousSecUserDataUpdate.getSecUsrType().equals(newSecuserDataUpdate.getSecUsrType())) {
+            usrModifiedFlg = true;
+        }
+
+        return  usrModifiedFlg;
+    }
 }
