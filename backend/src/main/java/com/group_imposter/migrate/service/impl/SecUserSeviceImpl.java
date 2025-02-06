@@ -142,11 +142,29 @@ public class SecUserSeviceImpl implements SecUserService {
     updatedUserData.setSecUsrPwd(requestDto.getSecUsrPwd().toUpperCase());
     updatedUserData.setSecUsrType(requestDto.getSecUsrType().toUpperCase());
 
-    fileContent.append(SecUserData_Accessor.getSecUserData(updatedUserData)).append("\n");
 
+    fileContent.append(SecUserData_Accessor.getSecUserData(updatedUserData));
     File file = new File(filePath);
-    if (file.exists()) {
-      file.delete();
+    boolean deleted = false;
+    int retryCount = 0;
+    while (!deleted && retryCount < 5) {
+      System.gc();
+      deleted = file.delete();
+      if (!deleted) {
+        try {
+          Thread.sleep(100);
+        } catch (InterruptedException ignored) {
+        }
+      }
+      retryCount++;
+    }
+
+    if (!deleted) {
+      return ResponseObject.builder()
+              .status("error")
+              .httpStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+              .message("Cannot delete the old file after many trials")
+              .build();
     }
 
     FileAccessBase userSecFileOut = new FileAccessBase(filePath);

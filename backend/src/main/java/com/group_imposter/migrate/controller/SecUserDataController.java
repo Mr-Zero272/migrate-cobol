@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/sec-user-data")
+@CrossOrigin
 public class SecUserDataController {
   @Autowired
   private SecUserService secUserService;

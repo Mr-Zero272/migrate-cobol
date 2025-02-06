@@ -135,7 +135,6 @@ errmsg: '',
 fkeys: 'ENTER=Process F3=Exit',
 fkey05: 'F5=Save',
 fkey12: 'F12=Cancel',
-
     });
 
     const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
