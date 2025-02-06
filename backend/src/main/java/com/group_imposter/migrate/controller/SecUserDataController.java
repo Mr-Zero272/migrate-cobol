@@ -12,9 +12,17 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/sec-user-data")
+@CrossOrigin
 public class SecUserDataController  {
     @Autowired
     private SecUserService secUserService;
+
+
+    @GetMapping("/{page}")
+    public ResponseEntity<ResponseObject> getPageSecUserData(@PathVariable int page){
+        ResponseObject respone = secUserService.getPageSecUserDate(page);
+        return new ResponseEntity<>(respone, respone.getHttpStatus());
+    }
 
     @PostMapping("/get-by-id")
     public ResponseEntity<ResponseObject> getByIdSecUserData(@RequestBody @Valid GetByIDUserDataRequestDto getByIdUser) {

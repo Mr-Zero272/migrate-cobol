@@ -9,6 +9,8 @@ import Input from '../../components/Input';
 
 export default function COUSR03() {
     
+    const [errorMessage, setErrorMessage] = useState<string>(""); 
+
     type formInput = {
         usridin: string,
 
@@ -45,8 +47,8 @@ curdate: 'mm/dd/yy',
 pgmname: '',
 title02: '',
 curtime: 'hh:mm:ss',
-fname: '',
-lname: '',
+    fname: '',
+    lname: '',
 usrtype: '',
 errmsg: '',
 
@@ -62,21 +64,65 @@ errmsg: '',
     };
 
     const handleSubmit = async (event: KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === 'Enter') {
-        for (const key in formData) {
-        if (!formData[key]) {
-            return;
-        }
-        }
+        if (event.key === 'Enter') {
+            const secUsrId = event.currentTarget.value.trim(); // Lấy giá trị từ input
+    
+            if (!secUsrId) {
+                setErrorMessage("Please enter User Id");
+                setReceivedData((prevState) => ({
+                    ...prevState, // Giữ lại giá trị cũ
+                    fname:  "", // Gán dữ liệu mới
+                    lname: "",
+                    usrtype: "",
+                  }));
+                return;
+            }
+    
+            try {
+                const response = await axios.post(
+                    "http://localhost:8080/sec-user-data/get-by-id", // Không truyền ID trong URL
+                    { secUsrId: secUsrId } // Truyền ID trong body
+                );
+    
+                const userData = response.data;
+                            // Kiểm tra nếu API trả về mã lỗi nhưng vẫn có response
+                
+          
+                setErrorMessage("")
+                setReceivedData((prevState) => ({
+                    ...prevState, // Giữ lại giá trị cũ
+                    fname: userData.data.secUsrFname || "", // Gán dữ liệu mới
+                    lname: userData.data.secUsrLname || "",
+                    usrtype: userData.data.secUsrType || "",
+                  }));
+               
+                
+            } catch (error:any) {
+            
+                console.error("Lỗi khi fetch dữ liệu:", error);
 
-        const response = await axios.post(
-        httpConfig.domain + '/Cousr03',
-        formData
-        );
-
-        setReceivedData(_state => response.data);
-    }
+                // Kiểm tra nếu server có phản hồi lỗi (error.response)
+                if (error.response) {
+                    setReceivedData((prevState) => ({
+                        ...prevState, // Giữ lại giá trị cũ
+                        fname:  "", // Gán dữ liệu mới
+                        lname: "",
+                        usrtype: "",
+                      }));
+                    setErrorMessage(error.response.data.message);
+                } else {
+                    setReceivedData((prevState) => ({
+                        ...prevState, // Giữ lại giá trị cũ
+                        fname:  "", // Gán dữ liệu mới
+                        lname: "",
+                        usrtype: "",
+                      }));
+                    setErrorMessage("Lỗi khi kết nối server, vui lòng thử lại!");
+                }
+            }
+        }
     };
+    
     
   return (
     <>
@@ -172,7 +218,7 @@ errmsg: '',
 <GridItem col={21} row={6}>
     <Input maxLength={8} className='bms underLine' name='usridin' id='usridin' type='text' styles={{color:"green"}}  onChange={handleInputChange} onKeyDown={handleSubmit}/>
 </GridItem>
-    
+
 <GridItem col={30} row={6}>
     <pre >
           
@@ -183,10 +229,10 @@ errmsg: '',
 <GridItem col={6} row={8}>
     <pre style={{color:"yellow"}}>
          ********************************************************************** 
+         <pre style={{ color: "red" }}>{errorMessage}</pre>
     </pre>
 </GridItem>
 
-    
 <GridItem col={6} row={11}>
     <pre style={{color:"turquoise"}}>
          First Name: 

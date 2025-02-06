@@ -11,5 +11,6 @@ public interface SecUserService {
     ResponseObject deleteUser(String secUsrId);
     ResponseObject updateSecUserData(SecUserDataRequestDto requestDto);
     ResponseObject getByIdSecUserData(GetByIDUserDataRequestDto getByIdUser);
+    ResponseObject getPageSecUserDate(int page);
 }
 

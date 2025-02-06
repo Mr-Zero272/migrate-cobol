@@ -22,6 +22,39 @@ import java.util.List;
 @Service
 public class SecUserSeviceImpl  implements SecUserService {
     String filePath = "src/main/java/com/group_imposter/migrate/data/user-security.txt";
+    @Override
+    public ResponseObject getPageSecUserDate(int page) {
+        List<SecUserData> secUserDataList = new ArrayList<>();
+
+        FileAccessBase userSecFile = new FileAccessBase(filePath);
+        userSecFile.open(FileOpenMode.IN);
+
+        boolean isEOF = false;
+
+        int start = 10* (page - 1);
+        int end = page*10;
+
+        int line = 1;
+        while (!isEOF) {
+            userSecFile.readLine();
+
+            if(line >= start && line <= end) {
+                SecUserData secUserData = new SecUserData();
+                SecUserData_Accessor.setSecUserData(secUserData, userSecFile.getCurrentLine());
+                secUserDataList.add(secUserData);
+            }
+            line++;
+
+            isEOF = userSecFile.isEOF();
+        }
+
+        userSecFile.close();
+        return ResponseObject.builder()
+                .status("success")
+                .httpStatus(HttpStatus.OK)
+                .data(secUserDataList)
+                .build();
+    }
 
 
     @Override
