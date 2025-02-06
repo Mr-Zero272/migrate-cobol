@@ -175,12 +175,12 @@ public class SecUserSeviceImpl implements SecUserService {
     return ResponseObject.builder()
             .status("success")
             .httpStatus(HttpStatus.OK)
-            .message("Updated user successfully")
+            .message("User " + updatedUserData.getSecUsrId() + " has been updated ...")
             .build();
+
+
   }
-
 }
-
 
 
 

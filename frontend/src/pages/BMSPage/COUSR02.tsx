@@ -21,12 +21,12 @@ export default function COUSR02() {
     pgmname: string;
     title02: string;
     curtime: string;
-    errmsg: string;
   };
 
   const [userId, setUserId] = useState<string>('');
   const [error, setError] = useState<string>('');
-
+  const [initialData, setInitialData] = useState<formInput | null>(null);
+  const [currentTime, setCurrentTime] = useState<string>('');
   const [formData, setFormData] = useState<formInput>({
     secUsrId: '',
     secUsrFname: '',
@@ -42,8 +42,7 @@ export default function COUSR02() {
     curdate: 'mm/dd/yy',
     pgmname: '',
     title02: '',
-    curtime: 'hh:mm:ss',
-    errmsg: ''
+    curtime: 'hh:mm:ss'
   });
 
   const getUserById = async (userId) => {
@@ -54,6 +53,7 @@ export default function COUSR02() {
       );
       if (response.data.status === 'success') {
         setFormData(response.data.data);
+        setInitialData(response.data.data);
         setError('');
       }
     } catch (error) {
@@ -68,14 +68,30 @@ export default function COUSR02() {
     }
   };
 
+  useEffect(() => {
+    const updateCurrentTime = () => {
+      const now = new Date();
+      const formattedTime = now.toLocaleTimeString('vi-VI');
+      setCurrentTime(formattedTime);
+    };
+    const timer = setInterval(updateCurrentTime, 1000);
+    return () => clearInterval(timer);
+  }, []);
+
   const updateUserData = async (data: formInput) => {
-    if (!data.secUsrId || data.secUsrId.length !== 8)
-      return setError('User ID must be exactly 8 characters');
-    if (!data.secUsrFname) return setError('First Name cannot be empty');
-    if (!data.secUsrLname) return setError('Last Name cannot be empty');
-    if (!data.secUsrPwd || data.secUsrPwd.length !== 8)
-      return setError('Password must be exactly 8 characters');
-    if (!data.secUsrType) return setError('User Type cannot be empty');
+    if (!data.secUsrId) return setError('User ID can NOT be empty...');
+    if (data.secUsrId.length !== 8)
+      return setError('User ID must be exactly 8 characters...');
+    if (!data.secUsrFname) return setError('First Name can NOT be empty...');
+    if (!data.secUsrLname) return setError('Last Name can NOT be empty...');
+    if (!data.secUsrPwd) return setError('Password can NOT be empty...');
+    if (data.secUsrPwd.length !== 8)
+      return setError('Password must be exactly 8 characters...');
+    if (!data.secUsrType) return setError('User Type can NOT be empty...');
+
+    if (JSON.stringify(data) === JSON.stringify(initialData)) {
+      return setError('No data changes to update...');
+    }
 
     try {
       await axios.put(`${httpConfig.domain}/sec-user-data`, data);
@@ -87,8 +103,9 @@ export default function COUSR02() {
         secUsrPwd: '',
         secUsrType: ''
       });
+      setError('');
     } catch (error) {
-      setError((error as any)?.response?.data.message || 'An error occurred');
+      setError((error as any)?.response?.data.message);
     }
   };
 
@@ -113,6 +130,7 @@ export default function COUSR02() {
             secUsrType: ''
           });
           break;
+        case 'F3':
         case 'F5':
           event.preventDefault();
           updateUserData(formData);
@@ -175,7 +193,9 @@ export default function COUSR02() {
         col={71}
         row={1}
       >
-        <pre style={{ color: '#7faded' }}>{receivedData.curdate}</pre>
+        <pre style={{ color: '#7faded' }}>
+          {new Date().toLocaleDateString('vi-VN') || receivedData.curdate}
+        </pre>
       </GridItem>
 
       <GridItem
@@ -210,7 +230,9 @@ export default function COUSR02() {
         col={71}
         row={2}
       >
-        <pre style={{ color: '#7faded' }}>{receivedData.curtime}</pre>
+        <pre style={{ color: '#7faded' }}>
+          {currentTime || receivedData.curtime}
+        </pre>
       </GridItem>
 
       <GridItem
