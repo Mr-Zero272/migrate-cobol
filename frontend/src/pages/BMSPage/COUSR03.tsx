@@ -6,9 +6,14 @@ import httpConfig from '../../config/httpConfig';
 
 import { GridItem } from '../../components/GridSystem';
 import Input from '../../components/Input';
+import { useLocation } from 'react-router-dom';
 
 export default function COUSR03() {
     
+    const [errorMessage, setErrorMessage] = useState<string>(""); 
+      const location = useLocation();
+      const { usridin } = location.state as { usridin: string };
+    const [id, setId] = useState<string>(usridin || ""); 
     type formInput = {
         usridin: string,
 
@@ -45,8 +50,8 @@ curdate: 'mm/dd/yy',
 pgmname: '',
 title02: '',
 curtime: 'hh:mm:ss',
-fname: '',
-lname: '',
+    fname: '',
+    lname: '',
 usrtype: '',
 errmsg: '',
 
@@ -59,24 +64,124 @@ errmsg: '',
         [event.target.name]: event.target.value,
         };
     });
+    setId(event.target.value); // Cập nhật state khi nhập dữ liệu
     };
-
+    const resetForm = () => {
+        setFormData({
+            usridin: '',  // Reset lại input field
+         
+        });
+        setReceivedData({
+            cousr03: '',
+            cousr3a: '',
+            trnname: '',
+            title01: '',
+            curdate: 'mm/dd/yy',
+            pgmname: '',
+            title02: '',
+            curtime: 'hh:mm:ss',
+            fname: '',
+            lname: '',
+            usrtype: '',
+            errmsg: '',
+        });
+    
+     
+    };
+    
     const handleSubmit = async (event: KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === 'Enter') {
-        for (const key in formData) {
-        if (!formData[key]) {
+        if (event.key === 'F4') {
+            resetForm();
             return;
         }
+        if (event.key === 'F5') {
+            // Nếu chưa nhập User ID thì báo lỗi
+            event.preventDefault(); // Ngăn chặn tải lại trang
+            event.stopPropagation(); // Ngăn chặn sự kiện lan truyền
+            const secUsrId = event.currentTarget.value.trim(); // Lấy giá trị từ input
+            if (!secUsrId) {
+                setErrorMessage("Please enter User ID to delete.");
+                return;
+            }
+            try {
+            
+                await axios.delete(`${httpConfig.domain}/sec-user-data/${secUsrId}`);
+                setErrorMessage("User deleted successfully.");
+                setId("");
+                resetForm(); // Reset lại form sau khi xóa thành công
+     
+            } catch (error: any) {
+                console.error("Error deleting user:", error);
+    
+                if (error.response) {
+                    setErrorMessage(error.response.data.message || "Failed to delete user.");
+                } else {
+                    setErrorMessage("Server connection error, please try again!");
+                }
+            }
+    
+            return;
         }
+    
+        if (event.key === 'Enter') {
+            const secUsrId = event.currentTarget.value.trim().toUpperCase(); // Lấy giá trị từ input
+    
+            if (!secUsrId) {
+                setErrorMessage("Please enter User Id");
+                setReceivedData((prevState) => ({
+                    ...prevState, // Giữ lại giá trị cũ
+                    fname:  "", // Gán dữ liệu mới
+                    lname: "",
+                    usrtype: "",
+                  }));
+                return;
+            }
+    
+            try {
+                const response = await axios.post(
+                    `${httpConfig.domain}/sec-user-data/get-by-id`, // Không truyền ID trong URL
+                    { secUsrId: secUsrId } // Truyền ID trong body
+                );
+    
+                const userData = response.data;
+                            // Kiểm tra nếu API trả về mã lỗi nhưng vẫn có response
+                
+          
+                setErrorMessage("")
+                setReceivedData((prevState) => ({
+                    ...prevState, // Giữ lại giá trị cũ
+                    fname: userData.data.secUsrFname || "", // Gán dữ liệu mới
+                    lname: userData.data.secUsrLname || "",
+                    usrtype: userData.data.secUsrType || "",
+                  }));
+               
+                
+            } catch (error:any) {
+            
+                console.error("Lỗi khi fetch dữ liệu:", error);
 
-        const response = await axios.post(
-        httpConfig.domain + '/Cousr03',
-        formData
-        );
-
-        setReceivedData(_state => response.data);
-    }
+                // Kiểm tra nếu server có phản hồi lỗi (error.response)
+                if (error.response) {
+                    setReceivedData((prevState) => ({
+                        ...prevState, // Giữ lại giá trị cũ
+                        fname:  "", // Gán dữ liệu mới
+                        lname: "",
+                        usrtype: "",
+                      }));
+                    setErrorMessage(error.response.data.message);
+                } else {
+                    setReceivedData((prevState) => ({
+                        ...prevState, // Giữ lại giá trị cũ
+                        fname:  "", // Gán dữ liệu mới
+                        lname: "",
+                        usrtype: "",
+                      }));
+                    setErrorMessage("Lỗi khi kết nối server, vui lòng thử lại!");
+                }
+            }
+        }
     };
+    
     
   return (
     <>
@@ -170,9 +275,9 @@ errmsg: '',
 
     
 <GridItem col={21} row={6}>
-    <Input maxLength={8} className='bms underLine' name='usridin' id='usridin' type='text' styles={{color:"green"}}  onChange={handleInputChange} onKeyDown={handleSubmit}/>
+    <input maxLength={8} className='bms underLine' name='usridin' id='usridin' type='text' style={{color:"green"}} value={id}  onChange={handleInputChange} onKeyDown={handleSubmit}/>
 </GridItem>
-    
+
 <GridItem col={30} row={6}>
     <pre >
           
@@ -183,10 +288,10 @@ errmsg: '',
 <GridItem col={6} row={8}>
     <pre style={{color:"yellow"}}>
          ********************************************************************** 
+      
     </pre>
 </GridItem>
 
-    
 <GridItem col={6} row={11}>
     <pre style={{color:"turquoise"}}>
          First Name: 
@@ -251,9 +356,7 @@ errmsg: '',
 
     
 <GridItem col={1} row={23}>
-    <pre style={{color:"red"}}>
-         {receivedData.errmsg } 
-    </pre>
+    <pre style={{ color: "red" }}>{errorMessage}</pre>
 </GridItem>
 
     
