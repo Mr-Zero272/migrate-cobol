@@ -49,6 +49,14 @@ public class SecUserSeviceImpl  implements SecUserService {
         }
 
         userSecFile.close();
+        if(secUserDataList.isEmpty()){
+            return ResponseObject.builder()
+                    .status("error")
+                    .httpStatus(HttpStatus.NOT_FOUND)
+                    .data(secUserDataList)
+                    .message("You are already at the bottom of the page...")
+                    .build();
+        }
         return ResponseObject.builder()
                 .status("success")
                 .httpStatus(HttpStatus.OK)
@@ -149,14 +157,18 @@ public class SecUserSeviceImpl  implements SecUserService {
                     .message("Lỗi mở file!")
                     .build();
         }
-
+        // lưu trữ ngoại trừ dòng chứa secUsrId bị xóa
         List<String> lines = new ArrayList<>();
         boolean userFound = false;
 
+        // isEOF trả về true khi đọc hết file
         while (!fileAccess.isEOF()) {
             fileAccess.readLine();
+//            Lấy nội dung dòng vừa đọc và lưu vào biến currentLine.
             String currentLine = fileAccess.getCurrentLine();
             if (currentLine != null) {
+//                Nếu dòng KHÔNG chứa secUsrId, thêm vào danh sách lines (giữ lại).
+//
                 if (!currentLine.startsWith(secUsrId)) {
                     lines.add(currentLine);
                 } else {
@@ -183,10 +195,13 @@ public class SecUserSeviceImpl  implements SecUserService {
                     .build();
         }
 
-        // Thử xóa file nhiều lần nếu bị khóa
+
+//        Một tiến trình khác hoặc chính JVM vẫn đang giữ file, khiến nó không thể bị xóa ngay lập tức.
+//          Cần thử xóa nhiều lần và chờ một khoảng thời gian ngắn để hệ thống giải phóng file.
         boolean deleted = false;
         int retryCount = 0;
         while (!deleted && retryCount < 5) {
+//            giúp yêu cầu dọn dẹp bộ nhớ, giúp xóa file dễ dàng hơn.
             System.gc(); // Giải phóng bộ nhớ để tránh khóa file
             deleted = file.delete();
             if (!deleted) {
@@ -207,6 +222,7 @@ public class SecUserSeviceImpl  implements SecUserService {
         }
 
         try {
+//            Sau khi xóa user khỏi danh sách, hệ thống thử tạo lại file nếu file đã bị xóa trước đó.
             if (!file.createNewFile()) {
                 return ResponseObject.builder()
                         .status("error")
@@ -221,7 +237,7 @@ public class SecUserSeviceImpl  implements SecUserService {
                     .message("Lỗi khi tạo lại file: " + e.getMessage())
                     .build();
         }
-
+//        Nếu danh sách lines rỗng, nghĩa là không còn user nào trong file.
         if (lines.isEmpty()) {
             return ResponseObject.builder()
                     .status("success")
@@ -229,7 +245,7 @@ public class SecUserSeviceImpl  implements SecUserService {
                     .message("User với secUsrId: " + secUsrId + " đã bị xóa. (File trống)")
                     .build();
         }
-
+//        Mở file để ghi lại dữ liệu còn lại
         fileAccess = new FileAccessBase(filePath);
         String openStatus = fileAccess.open(FileOpenMode.OUT);
         if (!FileStatusConstant.SUCCESS.equals(openStatus)) {
@@ -241,6 +257,7 @@ public class SecUserSeviceImpl  implements SecUserService {
         }
 
         for (String line : lines) {
+//            Nếu dòng không rỗng, ghi vào file.
             if (line != null && !line.trim().isEmpty()) {
                 fileAccess.write(line);
             } else {

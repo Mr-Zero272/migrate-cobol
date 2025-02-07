@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet';
 import { GridItem } from '../../components/GridSystem';
 import httpConfig from '../../config/httpConfig';
+import { useLocation } from 'react-router-dom';
 
 export default function COUSR02() {
   type formInput = {
@@ -23,8 +24,9 @@ export default function COUSR02() {
     curtime: string;
     errmsg: string;
   };
-
-  const [userId, setUserId] = useState<string>('');
+  const location = useLocation();
+  const { usridin } = location.state as { usridin: string };
+  const [userId, setUserId] = useState<string>(usridin || '');
   const [error, setError] = useState<string>('');
   const [initialData, setInitialData] = useState<formInput | null>(null);
   const [currentTime, setCurrentTime] = useState<string>('');
@@ -132,6 +134,7 @@ export default function COUSR02() {
             secUsrType: ''
           });
           break;
+        case 'F3':
         case 'F5':
           event.preventDefault();
           updateUserData(formData);
@@ -260,7 +263,7 @@ export default function COUSR02() {
           className='bms underLine'
           value={userId}
           onKeyDown={handleKeyInputId}
-          onChange={(e) => setUserId(e.target.value)}
+          onChange={(e) => setUserId(e.target.value.toUpperCase())}
           style={{ color: 'green', width: '90px' }}
         />
       </GridItem>
@@ -295,7 +298,7 @@ export default function COUSR02() {
         <input
           maxLength={20}
           className='bms underLine'
-          value={formData.secUsrFname}
+          value={formData.secUsrFname.trim()}
           onChange={(e) => handleInputChange(e, 'secUsrFname')}
           type='text'
           style={{ color: 'green' }}
@@ -324,7 +327,7 @@ export default function COUSR02() {
           maxLength={20}
           className='bms underLine'
           onChange={(e) => handleInputChange(e, 'secUsrLname')}
-          value={formData.secUsrLname}
+          value={formData.secUsrLname.trim()}
           type='text'
           style={{ color: 'green' }}
         />
@@ -352,7 +355,7 @@ export default function COUSR02() {
           maxLength={8}
           className='bms underLine'
           onChange={(e) => handleInputChange(e, 'secUsrPwd')}
-          value={formData.secUsrPwd}
+          value={formData.secUsrPwd.trim()}
           type='text'
           style={{ color: 'green', width: '80px' }}
         />
@@ -380,7 +383,7 @@ export default function COUSR02() {
           maxLength={1}
           className='bms underLine'
           onChange={(e) => handleInputChange(e, 'secUsrType')}
-          value={formData.secUsrType}
+          value={formData.secUsrType.trim()}
           type='text'
           style={{ color: 'green', width: '20px' }}
         />

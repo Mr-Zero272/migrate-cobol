@@ -6,11 +6,14 @@ import httpConfig from '../../config/httpConfig';
 
 import { GridItem } from '../../components/GridSystem';
 import Input from '../../components/Input';
+import { useLocation } from 'react-router-dom';
 
 export default function COUSR03() {
     
     const [errorMessage, setErrorMessage] = useState<string>(""); 
-
+      const location = useLocation();
+      const { usridin } = location.state as { usridin: string };
+    const [id, setId] = useState<string>(usridin || ""); 
     type formInput = {
         usridin: string,
 
@@ -61,6 +64,7 @@ errmsg: '',
         [event.target.name]: event.target.value,
         };
     });
+    setId(event.target.value); // Cập nhật state khi nhập dữ liệu
     };
     const resetForm = () => {
         setFormData({
@@ -103,8 +107,9 @@ errmsg: '',
             
                 await axios.delete(`${httpConfig.domain}/sec-user-data/${secUsrId}`);
                 setErrorMessage("User deleted successfully.");
+                setId("");
                 resetForm(); // Reset lại form sau khi xóa thành công
-    
+     
             } catch (error: any) {
                 console.error("Error deleting user:", error);
     
@@ -270,7 +275,7 @@ errmsg: '',
 
     
 <GridItem col={21} row={6}>
-    <Input maxLength={8} className='bms underLine' name='usridin' id='usridin' type='text' styles={{color:"green"}}     onChange={handleInputChange} onKeyDown={handleSubmit}/>
+    <input maxLength={8} className='bms underLine' name='usridin' id='usridin' type='text' style={{color:"green"}} value={id}  onChange={handleInputChange} onKeyDown={handleSubmit}/>
 </GridItem>
 
 <GridItem col={30} row={6}>
