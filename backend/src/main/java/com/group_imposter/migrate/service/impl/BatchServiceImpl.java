@@ -28,6 +28,9 @@ public class BatchServiceImpl implements BatchService {
     private Job handleTranCatBalRecordJob;
 
     @Autowired
+    private Job handlePrepareDataJob;
+
+    @Autowired
     private TranCatBalRecordRepository tranCatBalRecordRepository;
 
     @Override
@@ -45,8 +48,14 @@ public class BatchServiceImpl implements BatchService {
                 case "cbact04c":
                     jobLauncher.run(handleTranCatBalRecordJob, jobParameters);
                     break;
+                case "prepdata":
+                    jobLauncher.run(handlePrepareDataJob, jobParameters);
+                    break;
                 default:
-                    System.out.println("Job name not found");
+                    responseObject.setStatus("Fail");
+                    responseObject.setHttpStatus(HttpStatus.BAD_REQUEST);
+                    responseObject.setMessage("Job execution failed");
+                    responseObject.setError("Invalid batch name");
                     break;
             }
             responseObject.setStatus("Success");

@@ -20,6 +20,6 @@ public class BatchController {
 
     @PostMapping
     public ResponseEntity<ResponseObject> runBatch(@RequestBody Map<String, String> request) {
-        return null;
+        return ResponseEntity.ok(batchService.execute(request.get("batchName")));
     }
 }
