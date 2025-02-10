@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet';
 import { GridItem } from '../../components/GridSystem';
 import httpConfig from '../../config/httpConfig';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 export default function COUSR02() {
   type formInput = {
@@ -25,7 +25,8 @@ export default function COUSR02() {
     errmsg: string;
   };
   const location = useLocation();
-  const { usridin } = location.state as { usridin: string };
+  const navigate = useNavigate();
+  const { usridin } = location.state as { usridin: string } || "";
   const [userId, setUserId] = useState<string>(usridin || '');
   const [error, setError] = useState<string>('');
   const [initialData, setInitialData] = useState<formInput | null>(null);
@@ -121,9 +122,10 @@ export default function COUSR02() {
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
+      event.preventDefault();
       switch (event.key) {
         case 'F4':
-          event.preventDefault();
+          
           setUserId('');
           setError('');
           setFormData({
@@ -134,9 +136,12 @@ export default function COUSR02() {
             secUsrType: ''
           });
           break;
+          
         case 'F3':
+          updateUserData(formData);
+          navigate("/COADM01")
+          break;
         case 'F5':
-          event.preventDefault();
           updateUserData(formData);
           break;
         default:

@@ -29,27 +29,32 @@ public class SecUserSeviceImpl  implements SecUserService {
         FileAccessBase userSecFile = new FileAccessBase(filePath);
         userSecFile.open(FileOpenMode.IN);
 
-        boolean isEOF = false;
+        int start = 10 * (page - 1);
+        int end = page * 10;
 
-        int start = 10* (page - 1);
-        int end = page*10;
+        int line = 0;
+        String currentLine;
 
-        int line = 1;
-        while (!isEOF) {
-            userSecFile.readLine();
+        while (!userSecFile.isEOF()) {
+            currentLine = userSecFile.getCurrentLine(); // Lấy dòng hiện tại trước khi đọc tiếp
+            if (currentLine == null || currentLine.trim().isEmpty()) {
+                userSecFile.readLine(); // Đọc tiếp nếu dòng hiện tại rỗng
+                continue;
+            }
 
-            if(line >= start && line <= end) {
+            if (line >= start && line < end) {
                 SecUserData secUserData = new SecUserData();
-                SecUserData_Accessor.setSecUserData(secUserData, userSecFile.getCurrentLine());
+                SecUserData_Accessor.setSecUserData(secUserData, currentLine);
                 secUserDataList.add(secUserData);
             }
             line++;
 
-            isEOF = userSecFile.isEOF();
+            userSecFile.readLine(); // Đọc dòng tiếp theo để kiểm tra EOF
         }
 
         userSecFile.close();
-        if(secUserDataList.isEmpty()){
+
+        if (secUserDataList.isEmpty()) {
             return ResponseObject.builder()
                     .status("error")
                     .httpStatus(HttpStatus.NOT_FOUND)

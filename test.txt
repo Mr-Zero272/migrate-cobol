@@ -1,0 +1,46 @@
+   @Override
+    public ResponseObject getPageSecUserDate(int page) {
+        List<SecUserData> secUserDataList = new ArrayList<>();
+
+        FileAccessBase userSecFile = new FileAccessBase(filePath);
+        userSecFile.open(FileOpenMode.IN);
+
+        int start = 10 * (page - 1);
+        int end = page * 10;
+
+        int line = 0;
+        String currentLine;
+
+        while (!userSecFile.isEOF()) {
+            currentLine = userSecFile.getCurrentLine(); // Lấy dòng hiện tại trước khi đọc tiếp
+            if (currentLine == null || currentLine.trim().isEmpty()) {
+                userSecFile.readLine(); // Đọc tiếp nếu dòng hiện tại rỗng
+                continue;
+            }
+
+            if (line >= start && line < end) {
+                SecUserData secUserData = new SecUserData();
+                SecUserData_Accessor.setSecUserData(secUserData, currentLine);
+                secUserDataList.add(secUserData);
+            }
+            line++;
+
+            userSecFile.readLine(); // Đọc dòng tiếp theo để kiểm tra EOF
+        }
+
+        userSecFile.close();
+
+        if (secUserDataList.isEmpty()) {
+            return ResponseObject.builder()
+                    .status("error")
+                    .httpStatus(HttpStatus.NOT_FOUND)
+                    .data(secUserDataList)
+                    .message("You are already at the bottom of the page...")
+                    .build();
+        }
+        return ResponseObject.builder()
+                .status("success")
+                .httpStatus(HttpStatus.OK)
+                .data(secUserDataList)
+                .build();
+    }
