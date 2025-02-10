@@ -37,4 +37,28 @@ public class SecUserData_Accessor {
         secUserData.setSecUsrFiller(FieldFormat.format(23, ValueConst.SPACE));
     }
 //
+// Trích xuất User ID
+public static String extractUserId(String line) {
+    return line.substring(0, 8).trim(); // SEC-USR-ID (8 ký tự)
+}
+
+    // Trích xuất First Name
+    public static String extractFirstName(String line) {
+        return line.substring(8, 28).trim(); // SEC-USR-FNAME (20 ký tự)
+    }
+
+    // Trích xuất Last Name
+    public static String extractLastName(String line) {
+        return line.substring(28, 48).trim(); // SEC-USR-LNAME (20 ký tự)
+    }
+
+    // Trích xuất Password
+    public static String extractPassword(String line) {
+        return line.substring(48, 56).trim();  // SEC-USR-PWD (8 ký tự)
+    }
+
+    // Trích xuất User Type
+    public static String extractUserType(String line) {
+        return line.substring(56, 57).trim(); // SEC-USR-TYPE (1 ký tự)
+    }
 }
