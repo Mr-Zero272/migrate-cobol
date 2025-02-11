@@ -4,6 +4,7 @@ import axios from 'axios';
 import httpConfig from '../../config/httpConfig';
 
 import { GridItem } from '../../components/GridSystem';
+import { useNavigate } from 'react-router-dom';
 
 export default function COUSR01() {
 
@@ -39,6 +40,8 @@ export default function COUSR01() {
             secUsrType: '',
         });
 
+        const navigate = useNavigate();
+
     // State lưu trữ dữ liệu nhận từ server
     const [receivedData, setReceivedData] = useState<formOutput>(
         {
@@ -62,6 +65,23 @@ export default function COUSR01() {
         const now = new Date();
         return now.toLocaleTimeString("en-US", { hour12: false });
     };
+
+        useEffect(() => {
+            const handleKeyDown = (event) => {
+            switch (event.key) {
+                case 'F3':
+                event.preventDefault();
+                navigate("/COADM01");
+                break;
+                default:
+                break;
+            }
+            };
+            document.addEventListener('keydown', handleKeyDown);
+            return () => {
+            document.removeEventListener('keydown', handleKeyDown);
+            };
+        }, []);
 
     // Hàm lấy ngày hiện tại theo định dạng MM/DD/YY
     const getCurrentDate = (): string => {

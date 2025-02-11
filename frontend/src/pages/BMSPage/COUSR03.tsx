@@ -1,22 +1,21 @@
 
-import { type ChangeEvent, useState, type KeyboardEvent } from 'react';
+import { type ChangeEvent, useState, type KeyboardEvent, useEffect } from 'react';
 import { Helmet } from 'react-helmet';
 import axios from 'axios';
 import httpConfig from '../../config/httpConfig';
 
 import { GridItem } from '../../components/GridSystem';
 import Input from '../../components/Input';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 export default function COUSR03() {
     
     const [errorMessage, setErrorMessage] = useState<string>(""); 
       const location = useLocation();
-      const { usridin } = location.state as { usridin: string };
+      const { usridin } = location.state as { usridin: string } || "";
     const [id, setId] = useState<string>(usridin || ""); 
     type formInput = {
         usridin: string,
-
     }
 
     type formOutput = {
@@ -56,7 +55,7 @@ usrtype: '',
 errmsg: '',
 
     });
-
+const navigate = useNavigate();
     const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     setFormData((state) => {
         return {
@@ -88,6 +87,58 @@ errmsg: '',
     
      
     };
+
+
+      useEffect(() => {
+                const handleKeyDown = (event) => {
+                switch (event.key) {
+                    case 'F3':
+                    event.preventDefault();
+                    navigate(-1);
+                    break;
+                    default:
+                    break;
+                }
+                };
+                document.addEventListener('keydown', handleKeyDown);
+                return () => {
+                document.removeEventListener('keydown', handleKeyDown);
+                };
+            }, []);
+
+            const getCurrentTime = (): string => {
+                const now = new Date();
+                return now.toLocaleTimeString("en-US", { hour12: false });
+            };
+
+            const getCurrentDate = (): string => {
+                const now = new Date();
+                const month = String(now.getMonth() + 1).padStart(2, "0"); // Lấy tháng (0-based index)
+                const day = String(now.getDate()).padStart(2, "0");
+                const year = String(now.getFullYear()).slice(-2); // Lấy 2 số cuối của năm
+                return `${month}/${day}/${year}`;
+            };
+        
+            // useEffect để cập nhật ngày và giờ khi component mount
+            useEffect(() => {
+                // Cập nhật ngày và giờ ngay khi component render
+                setReceivedData((prev) => ({
+                    ...prev,
+                    curtime: getCurrentTime(),
+                    curdate: getCurrentDate(),
+                }));
+        
+                // Thiết lập interval để cập nhật giờ mỗi giây
+                const interval = setInterval(() => {
+                    setReceivedData((prev) => ({
+                        ...prev,
+                        curtime: getCurrentTime(),
+                    }));
+                }, 1000); // Cập nhật mỗi giây
+        
+                return () => clearInterval(interval); // Xóa interval khi unmount
+            }, []);
+        
     
     const handleSubmit = async (event: KeyboardEvent<HTMLInputElement>) => {
         if (event.key === 'F4') {
@@ -185,10 +236,10 @@ errmsg: '',
     
   return (
     <>
-     
-    <Helmet>
-        <title>COUSR03</title>
-    </Helmet>
+        
+        <Helmet>
+            <title>COUSR03</title>
+        </Helmet>
     
 <GridItem col={1} row={1}>
     <pre style={{color:"#7faded"}}>
