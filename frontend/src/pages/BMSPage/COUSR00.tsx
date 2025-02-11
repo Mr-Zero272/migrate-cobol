@@ -194,13 +194,13 @@ export default function COUSR00() {
 
     cousr0a: "",
 
-    trnname: "",
+    trnname: "CU00",
 
     title01: "",
 
     curdate: "mm/dd/yy",
 
-    pgmname: "",
+    pgmname: "COUSR00",
 
     title02: "",
 
@@ -772,11 +772,11 @@ export default function COUSR00() {
 
         if (value === "u" || value === "U") {
 
-          navigate("/COUSR02", { state: { usridin: formData.usridin } });
+          navigate("/COUSR02", { state: { usridin: formData.usridin, fromCOUSR00: true } });
 
         } else if (value === "d" || value === "D") {
 
-          navigate("/COUSR03", { state: { usridin: formData.usridin } });
+          navigate("/COUSR03", { state: { usridin: formData.usridin, fromCOUSR00: true } });
 
         } else {
 
@@ -1573,6 +1573,7 @@ export default function COUSR00() {
       <GridItem col={21} row={6}>
 
         <input
+              autoFocus
 
           maxLength={8}
 
@@ -1690,6 +1691,7 @@ export default function COUSR00() {
 
         <input
 
+   
           maxLength={1}
 
           className="bms underLine"

@@ -47,10 +47,10 @@ export default function COUSR01() {
         {
             cousr01: '',
             cousr1a: '',
-            trnname: '',
+            trnname: 'CU01',
             title01: '',
             curdate: 'mm/dd/yy',   // Mặc định là giá trị placeholder
-            pgmname: '',
+            pgmname: 'COUSR01',
             title02: '',
             curtime: 'hh:mm:ss',   // Mặc định là giá trị placeholder
             errmsg: '',

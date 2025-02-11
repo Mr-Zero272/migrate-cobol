@@ -155,13 +155,22 @@ public class SecUserSeviceImpl  implements SecUserService {
         FileAccessBase fileAccess = new FileAccessBase(filePath);
         String status = fileAccess.open(FileOpenMode.IN);
 
+        File file = new File(filePath);
+        if (!file.exists()) {
+            return ResponseObject.builder()
+                    .status("error")
+                    .httpStatus(HttpStatus.NOT_FOUND)
+                    .message("Unable to lookup User...")
+                    .build();
+        }
         if (!FileStatusConstant.SUCCESS.equals(status)) {
             return ResponseObject.builder()
                     .status("error")
                     .httpStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .message("Lỗi mở file!")
+                    .message("Unable to lookup User...")
                     .build();
         }
+
         // lưu trữ ngoại trừ dòng chứa secUsrId bị xóa
         List<String> lines = new ArrayList<>();
         boolean userFound = false;
@@ -191,14 +200,7 @@ public class SecUserSeviceImpl  implements SecUserService {
                     .build();
         }
 
-        File file = new File(filePath);
-        if (!file.exists()) {
-            return ResponseObject.builder()
-                    .status("error")
-                    .httpStatus(HttpStatus.NOT_FOUND)
-                    .message("File không tồn tại.")
-                    .build();
-        }
+
 
 
 //        Một tiến trình khác hoặc chính JVM vẫn đang giữ file, khiến nó không thể bị xóa ngay lập tức.
@@ -222,7 +224,7 @@ public class SecUserSeviceImpl  implements SecUserService {
             return ResponseObject.builder()
                     .status("error")
                     .httpStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .message("Không thể xóa file cũ sau nhiều lần thử.")
+                    .message("Unable to lookup User...")
                     .build();
         }
 
@@ -232,14 +234,14 @@ public class SecUserSeviceImpl  implements SecUserService {
                 return ResponseObject.builder()
                         .status("error")
                         .httpStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-                        .message("Không thể tạo lại file.")
+                        .message("Unable to lookup User...")
                         .build();
             }
         } catch (IOException e) {
             return ResponseObject.builder()
                     .status("error")
                     .httpStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .message("Lỗi khi tạo lại file: " + e.getMessage())
+                    .message("Unable to lookup User..." + e.getMessage())
                     .build();
         }
 //        Nếu danh sách lines rỗng, nghĩa là không còn user nào trong file.
@@ -257,7 +259,7 @@ public class SecUserSeviceImpl  implements SecUserService {
             return ResponseObject.builder()
                     .status("error")
                     .httpStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .message("Không thể mở file để ghi.")
+                    .message("Unable to lookup User...")
                     .build();
         }
 
@@ -274,7 +276,7 @@ public class SecUserSeviceImpl  implements SecUserService {
         return ResponseObject.builder()
                 .status("success")
                 .httpStatus(HttpStatus.OK)
-                .message("User với secUsrId: " + secUsrId + " đã bị xóa.")
+                .message("User " + secUsrId + " has been deleted ...")
                 .build();
     }
 

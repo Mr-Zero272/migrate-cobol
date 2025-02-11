@@ -9,7 +9,7 @@ import Input from '../../components/Input';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 export default function COUSR03() {
-    
+    const navigate = useNavigate();
     const [errorMessage, setErrorMessage] = useState<string>(""); 
       const location = useLocation();
       const { usridin } = location.state as { usridin: string } || "";
@@ -17,7 +17,11 @@ export default function COUSR03() {
     type formInput = {
         usridin: string,
     }
-
+    useEffect(() => {
+        if ( !(location.state as any)?.fromCOUSR00 ) {
+          navigate('/COUSR00', { replace: true });
+        }
+      }, [location, navigate]); 
     type formOutput = {
         cousr03: string,
 cousr3a: string,
@@ -43,10 +47,10 @@ errmsg: string,
      {
         cousr03: '',
 cousr3a: '',
-trnname: '',
+trnname: 'CU03',
 title01: '',
 curdate: 'mm/dd/yy',
-pgmname: '',
+pgmname: 'COUSR03C',
 title02: '',
 curtime: 'hh:mm:ss',
     fname: '',
@@ -55,7 +59,7 @@ usrtype: '',
 errmsg: '',
 
     });
-const navigate = useNavigate();
+
     const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     setFormData((state) => {
         return {
@@ -66,6 +70,7 @@ const navigate = useNavigate();
     setId(event.target.value); // Cập nhật state khi nhập dữ liệu
     };
     const resetForm = () => {
+        setId("");
         setFormData({
             usridin: '',  // Reset lại input field
          

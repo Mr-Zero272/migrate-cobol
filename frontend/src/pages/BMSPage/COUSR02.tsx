@@ -41,10 +41,10 @@ export default function COUSR02() {
   const [receivedData, _] = useState<formOutput>({
     cousr02: '',
     cousr2a: '',
-    trnname: '',
+    trnname: 'CU02',
     title01: '',
     curdate: 'mm/dd/yy',
-    pgmname: '',
+    pgmname: 'COUSR02',
     title02: '',
     curtime: 'hh:mm:ss',
     errmsg: ''
@@ -163,6 +163,12 @@ export default function COUSR02() {
       [field]: e.target.value
     });
   };
+
+  useEffect(() => {
+    if ( !(location.state as any)?.fromCOUSR00 ) {
+      navigate('/COUSR00', { replace: true });
+    }
+  }, [location, navigate]);
 
   return (
     <>

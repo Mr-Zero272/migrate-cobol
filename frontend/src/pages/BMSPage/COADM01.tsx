@@ -297,7 +297,7 @@ export default function COADM01() {
  
  
             <GridItem col={41} row={20}>
-                <input type="number" maxLength={2} style={{ color: "white", width: "25px" }} className='bms underLine' name='option' id='option' onChange={handleInputChange} onKeyDown={handleSubmit} />
+                <input autoFocus type="number" maxLength={2} style={{ color: "white", width: "25px" }} className='bms underLine' name='option' id='option' onChange={handleInputChange} onKeyDown={handleSubmit} />
             </GridItem>
  
             <GridItem col={44} row={20}>
