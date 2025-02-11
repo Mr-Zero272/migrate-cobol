@@ -17,11 +17,11 @@ export default function COUSR03() {
     type formInput = {
         usridin: string,
     }
-    useEffect(() => {
-        if ( !(location.state as any)?.fromCOUSR00 ) {
-          navigate('/COUSR00', { replace: true });
-        }
-      }, [location, navigate]); 
+    // useEffect(() => {
+    //     if ( !(location.state as any)?.fromCOUSR00 ) {
+    //       navigate('/COUSR00', { replace: true });
+    //     }
+    //   }, [location, navigate]); 
     type formOutput = {
         cousr03: string,
 cousr3a: string,

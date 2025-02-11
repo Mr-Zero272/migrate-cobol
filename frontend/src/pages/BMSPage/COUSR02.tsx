@@ -38,7 +38,7 @@ export default function COUSR02() {
     secUsrPwd: '',
     secUsrType: ''
   });
-  const [receivedData, _] = useState<formOutput>({
+  const [receivedData, setReceivedData] = useState<formOutput>({
     cousr02: '',
     cousr2a: '',
     trnname: 'CU02',
@@ -93,7 +93,7 @@ export default function COUSR02() {
     if (data.secUsrPwd.length !== 8)
       return setError('Password must be exactly 8 characters...');
     if (!data.secUsrType) return setError('User Type can NOT be empty...');
-
+    if (data.secUsrType !== "U" && data.secUsrType !=="A") return setError('User type must be A or U');
     if (JSON.stringify(data) === JSON.stringify(initialData)) {
       return setError('No data changes to update...');
     }
@@ -120,12 +120,12 @@ export default function COUSR02() {
     }
   };
 
+
   useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
-      event.preventDefault();
+    const handleKeyDown =async (event: KeyboardEvent) => {
       switch (event.key) {
         case 'F4':
-          
+          event.preventDefault();
           setUserId('');
           setError('');
           setFormData({
@@ -136,16 +136,17 @@ export default function COUSR02() {
             secUsrType: ''
           });
           break;
-          
         case 'F3':
-          updateUserData(formData);
-          navigate("/COADM01")
+          event.preventDefault();
+          await updateUserData(formData);
+           navigate("/COADM01");
           break;
         case 'F5':
+          event.preventDefault();
           updateUserData(formData);
           break;
         default:
-          break;
+          break;  
       }
     };
     document.addEventListener('keydown', handleKeyDown);
@@ -158,17 +159,17 @@ export default function COUSR02() {
     e: React.ChangeEvent<HTMLInputElement>,
     field: keyof formInput
   ) => {
-    setFormData({
-      ...formData,
+    setFormData((prevData) => ({
+      ...prevData,
       [field]: e.target.value
-    });
+    }));
   };
 
-  useEffect(() => {
-    if ( !(location.state as any)?.fromCOUSR00 ) {
-      navigate('/COUSR00', { replace: true });
-    }
-  }, [location, navigate]);
+  // useEffect(() => {
+  //   if ( !(location.state as any)?.fromCOUSR00 ) {
+  //     navigate('/COUSR00', { replace: true });
+  //   }
+  // }, [location, navigate]);
 
   return (
     <>
@@ -310,7 +311,9 @@ export default function COUSR02() {
           maxLength={20}
           className='bms underLine'
           value={formData.secUsrFname.trim()}
-          onChange={(e) => handleInputChange(e, 'secUsrFname')}
+          onChange={(e) =>{
+            handleInputChange(e, 'secUsrFname')
+          }}
           type='text'
           style={{ color: 'green' }}
         />
@@ -394,7 +397,7 @@ export default function COUSR02() {
           maxLength={1}
           className='bms underLine'
           onChange={(e) => handleInputChange(e, 'secUsrType')}
-          value={formData.secUsrType.trim()}
+          value={formData.secUsrType.toUpperCase().trim()}
           type='text'
           style={{ color: 'green', width: '20px' }}
         />
