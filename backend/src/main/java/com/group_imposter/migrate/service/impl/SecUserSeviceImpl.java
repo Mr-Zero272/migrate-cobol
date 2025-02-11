@@ -21,7 +21,7 @@ import java.util.List;
 
 @Service
 public class SecUserSeviceImpl  implements SecUserService {
-    String filePath = "D:\\Master\\migrate-cobol\\backend\\src\\main\\java\\com\\group_imposter\\migrate\\data\\user-security.txt";
+    String filePath = "src/main/java/com/group_imposter/migrate/data/user-security.txt";
     @Override
     public ResponseObject getPageSecUserDate(int page) {
         List<SecUserData> secUserDataList = new ArrayList<>();

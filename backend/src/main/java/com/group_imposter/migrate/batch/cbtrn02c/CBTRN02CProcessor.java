@@ -235,13 +235,12 @@ public class CBTRN02CProcessor implements ItemProcessor<DalytranRecord, TranReco
 
         System.out.println("Search with id: " + fdTranCatBalRecord.getFdTranCatBalRecordId());
         tranCatBalRecord = tranCatBalRecordRepository.findById(fdTranCatBalRecord.getFdTranCatBalRecordId()).orElseGet(() -> {
-//            TcatbalfStatus_Accessor.setTcatbalfStatus(tcatbalfStatus, FileStatusConstant.INVALID_KEY_READ);
+//            TcatbalfStatus_Accessor.setTcatbalfStatus(tcatbalfStatus, FileStatusConstant.FAILED);
             System.out.println("TCATBAL record not found for key :" + fdTranCatBalRecord.getFdTranCatBalRecordId() + " creating...");
             wsCreateTrancatRec = "Y";
             return new TranCatBalRecord();
         });
 
-        System.out.println(tranCatBalRecord);
 //        TranCatBalRecord_Accessor.setTranCatBalRecord(tranCatBalRecord, FieldFormat.format(50, tcatbalFile.getCurrentLine()));
         if (StringUtil.compare(TcatbalfStatus_Accessor.getTcatbalfStatus(tcatbalfStatus), "00") == 0 || StringUtil.compare(TcatbalfStatus_Accessor.getTcatbalfStatus(tcatbalfStatus), "23") == 0){
             applResult = 0;
@@ -273,11 +272,9 @@ public class CBTRN02CProcessor implements ItemProcessor<DalytranRecord, TranReco
 
     private int _2700ACreateTcatbalRec(){
         tranCatBalRecord = new TranCatBalRecord();
-//        tranCatBalRecord.getTranCatBalRecordId().setTrancatAcctId(cardXrefRecord.getXrefAcctId());
-//        tranCatBalRecord.getTranCatBalRecordId().setTrancatTypeCd(dalytranRecord.getDalytranTypeCd());
-//        tranCatBalRecord.getTranCatBalRecordId().setTrancatCd(dalytranRecord.getDalytranCatCd());
-        tranCatBalRecord.setTranCatBalRecordId(
-                new TranCatBalRecordId(cardXrefRecord.getXrefAcctId(), dalytranRecord.getDalytranTypeCd(), dalytranRecord.getDalytranCatCd()));
+        tranCatBalRecord.getTranCatBalRecordId().setTrancatAcctId(cardXrefRecord.getXrefAcctId());
+        tranCatBalRecord.getTranCatBalRecordId().setTrancatTypeCd(dalytranRecord.getDalytranTypeCd());
+        tranCatBalRecord.getTranCatBalRecordId().setTrancatCd(dalytranRecord.getDalytranCatCd());
         tranCatBalRecord.setTranCatBal(new fDecimal(tranCatBalRecord.getTranCatBal(), 2).add(dalytranRecord.getDalytranAmt(), 2).bigDecimalValue());
 
         System.out.println("Create trancatbal record with id: " + tranCatBalRecord.getTranCatBalRecordId());
@@ -348,7 +345,7 @@ public class CBTRN02CProcessor implements ItemProcessor<DalytranRecord, TranReco
     private int _2900WriteTransactionFile(){
         applResult = 8;
         FdTranfileRec_Accessor.setFdTranfileRec(fdTranfileRec, TranRecord_Accessor.getTranRecord(tranRecord));
-//        System.out.println("Add new tran record with id: " + tranRecord.getTranId());
+
         tranRecordRepository.save(tranRecord);
         TranfileStatus_Accessor.setTranfileStatus(tranfileStatus, "00");
         if (StringUtil.compare(TranfileStatus_Accessor.getTranfileStatus(tranfileStatus), "00") == 0){
@@ -379,12 +376,7 @@ public class CBTRN02CProcessor implements ItemProcessor<DalytranRecord, TranReco
         cobolTs.setCobMil(String.valueOf(LocalDateTime.now().getNano() / 1000000));
         cobolTs.setCobYyyy(String.valueOf(LocalDateTime.now().getYear()));
         cobolTs.setCobRest(String.valueOf(LocalDateTime.now().getNano() % 1000000));
-        // TODO : MoveStatementContext error
-      /*
-      =============
-      MOVE FUNCTION CURRENT-DATE TO COBOL-TS
-      =============
-      */
+
         db2FormatTs = Filler_Accessor.setDb2Yyyy(db2FormatTs, cobolTs.getCobYyyy());
         db2FormatTs = Filler_Accessor.setDb2Mm(db2FormatTs, cobolTs.getCobMm());
         db2FormatTs = Filler_Accessor.setDb2Dd(db2FormatTs, cobolTs.getCobDd());

@@ -31,6 +31,12 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.transaction.PlatformTransactionManager;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+
 @Configuration
 @RequiredArgsConstructor(onConstructor_ = {@Autowired})
 public class PrepareJobConfig {
@@ -145,6 +151,12 @@ public class PrepareJobConfig {
                     tranCatBalRecordRepository.deleteAll();
                     cardXrefRecordRepository.deleteAll();
                     tranRecordRepository.deleteAll();
+                    try (BufferedWriter bw = Files.newBufferedWriter(Path.of("src/main/resources/data/ASCII/dalyrejs.txt"))) {
+                        // File content will be deleted when the writer is created
+                    } catch (IOException e) {
+                        System.out.println("Cannot delete the contents of the file");
+                        e.printStackTrace();
+                    }
                     return RepeatStatus.FINISHED;
                 }, platformTransactionManager)
                 .build();

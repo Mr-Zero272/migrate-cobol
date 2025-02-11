@@ -56,7 +56,7 @@ public class BatchServiceImpl implements BatchService {
             }
             responseObject.setStatus("Success");
             responseObject.setHttpStatus(HttpStatus.OK);
-            responseObject.setMessage("Job executed successfully");
+            responseObject.setMessage("Job " + batchName + " executed successfully");
         } catch (JobExecutionAlreadyRunningException | JobInstanceAlreadyCompleteException | JobRestartException |
                  JobParametersInvalidException e) {
             responseObject.setStatus("Fail");

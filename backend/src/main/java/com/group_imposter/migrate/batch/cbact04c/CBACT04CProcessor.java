@@ -355,12 +355,7 @@ public class CBACT04CProcessor implements ItemProcessor<TranCatBalRecord, TranRe
         cobolTs.setCobMil(String.valueOf(LocalDateTime.now().getNano() / 1000000));
         cobolTs.setCobYyyy(String.valueOf(LocalDateTime.now().getYear()));
         cobolTs.setCobRest(String.valueOf(LocalDateTime.now().getNano() % 1000000));
-        // TODO : MoveStatementContext error
-      /*
-      =============
-      MOVE FUNCTION CURRENT-DATE TO COBOL-TS
-      =============
-      */
+
         db2FormatTs = Filler_Accessor.setDb2Yyyy(db2FormatTs, cobolTs.getCobYyyy());
         db2FormatTs = Filler_Accessor.setDb2Mm(db2FormatTs, cobolTs.getCobMm());
         db2FormatTs = Filler_Accessor.setDb2Dd(db2FormatTs, cobolTs.getCobDd());
