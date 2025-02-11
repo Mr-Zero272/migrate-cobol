@@ -115,7 +115,7 @@ public class CBACT04CProcessor implements ItemProcessor<TranCatBalRecord, TranRe
     private int _1050UpdateAccount() {
         accountRecord.setAcctCurrBal(accountRecord.getAcctCurrBal().add(wsMiscVars.getWsTotalInt()));
         accountRecord.setAcctCurrCycDebit(new BigDecimal(0));
-        accountRecord.setAcctCurrCycDebit(new BigDecimal(0));
+        accountRecord.setAcctCurrCycCredit(new BigDecimal(0));
 
         if (accountRecord.getAcctId() != 0) {
             accountRecordRepository.save(accountRecord);

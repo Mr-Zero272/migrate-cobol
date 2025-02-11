@@ -47,10 +47,10 @@ export default function COUSR01() {
         {
             cousr01: '',
             cousr1a: '',
-            trnname: '',
+            trnname: 'CU01',
             title01: '',
             curdate: 'mm/dd/yy',   // Mặc định là giá trị placeholder
-            pgmname: '',
+            pgmname: 'COUSR01',
             title02: '',
             curtime: 'hh:mm:ss',   // Mặc định là giá trị placeholder
             errmsg: '',
@@ -58,7 +58,7 @@ export default function COUSR01() {
 
     // State lưu lỗi và trạng thái lỗi
     const [error, setError] = useState<string>('');
-    const [isError, setIsError] = useState(false);
+    const [isError, setIsError] = useState(true);
 
     // Hàm lấy giờ hiện tại theo định dạng HH:MM:SS
     const getCurrentTime = (): string => {
@@ -73,6 +73,20 @@ export default function COUSR01() {
                 event.preventDefault();
                 navigate("/COADM01");
                 break;
+                case 'F4': // Xóa dữ liệu form khi nhấn F4
+                    event.preventDefault();
+                    setFormData({
+                        secUsrFname: '',
+                        secUsrLname: '',
+                        secUsrId: '',
+                        secUsrPwd: '',
+                        secUsrType: '',
+                    });
+                    break;
+                case 'F12':
+                    event.preventDefault();
+                    navigate("/COADM01");
+                    break;
                 default:
                 break;
             }
@@ -81,7 +95,8 @@ export default function COUSR01() {
             return () => {
             document.removeEventListener('keydown', handleKeyDown);
             };
-        }, []);
+        }, [navigate]);
+
 
     // Hàm lấy ngày hiện tại theo định dạng MM/DD/YY
     const getCurrentDate = (): string => {
@@ -130,26 +145,39 @@ export default function COUSR01() {
 
         // Kiểm tra validation trước khi gửi request
         if (!data.secUsrId) {
+            setIsError(true);
             return setError('User ID can NOT be empty...');
         }
 
         if (data.secUsrId.length !== 8) {
+            setIsError(true);
             return setError('User ID must be exactly 8 characters');
         }
 
-        if (!data.secUsrFname) return setError('First Name can NOT be empty...');
+        if (!data.secUsrFname) {
+            setIsError(true);
+            return setError('First Name can NOT be empty...');
+        }
 
-        if (!data.secUsrLname) return setError('Last Name can NOT be empty...');
+        if (!data.secUsrLname) {
+            setIsError(true);
+            return setError('Last Name can NOT be empty...');
+        }
 
         if (!data.secUsrPwd) {
+            setIsError(true);
             return setError('Password can NOT be empty...');
         }
 
         if (data.secUsrPwd.length !== 8) {
+            setIsError(true);
             return setError('Password must be exactly 8 characters');
         }
 
-        if (!data.secUsrType) return setError('User Type can NOT be empty...');
+        if (!data.secUsrType) {
+            setIsError(true);
+            return setError('User Type can NOT be empty...');
+        }
 
         try {
             // Gửi request API tạo user
@@ -286,7 +314,7 @@ export default function COUSR01() {
 
             <GridItem col={18} row={8}>
                 <input maxLength={20} className='bms underLine' name='secUsrFname' id='secUsrFname' type='text' style={{ color: "green" }}
-                    onChange={(e) => handleInputChange(e, 'secUsrFname')} />
+                       value={formData.secUsrFname} onChange={(e) => handleInputChange(e, 'secUsrFname')} />
             </GridItem>
 
             <GridItem col={39} row={8}>
@@ -304,7 +332,7 @@ export default function COUSR01() {
 
 
             <GridItem col={56} row={8}>
-                <input maxLength={20} className='bms underLine' name='secUsrLname' id='secUsrLname' type='text' style={{ color: "green" }} onChange={(e) => handleInputChange(e, 'secUsrLname')} />
+                <input maxLength={20} className='bms underLine' name='secUsrLname' id='secUsrLname' type='text' style={{ color: "green" }} value={formData.secUsrLname} onChange={(e) => handleInputChange(e, 'secUsrLname')} />
             </GridItem>
 
             <GridItem col={77} row={8}>
@@ -322,7 +350,7 @@ export default function COUSR01() {
 
 
             <GridItem col={15} row={11}>
-                <input maxLength={8} className='bms underLine' name='secUsrId' id='secUsrId' type='text' style={{ color: "green", width: "35%" }} onChange={(e) => handleInputChange(e, 'secUsrId')} />
+                <input maxLength={8} className='bms underLine' name='secUsrId' id='secUsrId' type='text' style={{ color: "green", width: "35%" }} value={formData.secUsrId} onChange={(e) => handleInputChange(e, 'secUsrId')} />
             </GridItem>
 
             <GridItem col={24} row={11}>
@@ -340,7 +368,7 @@ export default function COUSR01() {
 
 
             <GridItem col={55} row={11}>
-                <input maxLength={8} className='bms underLine' name='secUsrPwd' id='secUsrPwd' type='text' style={{ color: "green", width: "35%" }} onChange={(e) => handleInputChange(e, 'secUsrPwd')} />
+                <input maxLength={8} className='bms underLine' name='secUsrPwd' id='secUsrPwd' type='text' style={{ color: "green", width: "35%" }} value={formData.secUsrPwd} onChange={(e) => handleInputChange(e, 'secUsrPwd')} />
             </GridItem>
 
             <GridItem col={64} row={11}>
@@ -358,7 +386,7 @@ export default function COUSR01() {
 
 
             <GridItem col={17} row={14}>
-                <input maxLength={1} className='bms underLine' name='secUsrType' id='secUsrType' type='text' style={{ color: "green", width: "5%" }} onChange={(e) => handleInputChange(e, 'secUsrType')} />
+                <input maxLength={1} className='bms underLine' name='secUsrType' id='secUsrType' type='text' style={{ color: "green", width: "5%" }} value={formData.secUsrType} onChange={(e) => handleInputChange(e, 'secUsrType')} />
             </GridItem>
 
             <GridItem col={19} row={14}>
@@ -369,10 +397,10 @@ export default function COUSR01() {
 
 
             {/* Hiển thị thông báo lỗi */}
+            {/* Hiển thị thông báo lỗi hoặc thành công */}
             <GridItem col={1} row={23}>
                 <pre style={{ color: isError ? "red" : "green" }}>
                     {error}
-                    {/* {receivedData.errmsg} */}
                 </pre>
             </GridItem>
 

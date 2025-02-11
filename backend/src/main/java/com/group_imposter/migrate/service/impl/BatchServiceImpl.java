@@ -1,7 +1,6 @@
 package com.group_imposter.migrate.service.impl;
 
 import com.group_imposter.migrate.dto.response.ResponseObject;
-import com.group_imposter.migrate.repository.TranCatBalRecordRepository;
 import com.group_imposter.migrate.service.BatchService;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobParameters;
@@ -29,9 +28,6 @@ public class BatchServiceImpl implements BatchService {
 
     @Autowired
     private Job handlePrepareDataJob;
-
-    @Autowired
-    private TranCatBalRecordRepository tranCatBalRecordRepository;
 
     @Override
     public ResponseObject execute(String batchName) {

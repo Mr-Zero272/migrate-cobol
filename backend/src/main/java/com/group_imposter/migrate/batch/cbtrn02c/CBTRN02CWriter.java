@@ -8,6 +8,7 @@ public class CBTRN02CWriter implements ItemWriter<TranRecord> {
 
     @Override
     public void write(Chunk<? extends TranRecord> chunk) throws Exception {
+        System.out.println("Writer executed");
         // handle if the record empty here
 //        for(TranRecord record : chunk) {
 //            System.out.println(record);

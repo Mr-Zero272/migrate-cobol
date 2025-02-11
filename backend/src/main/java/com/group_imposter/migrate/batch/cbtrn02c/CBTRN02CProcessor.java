@@ -280,7 +280,6 @@ public class CBTRN02CProcessor implements ItemProcessor<DalytranRecord, TranReco
                 new TranCatBalRecordId(cardXrefRecord.getXrefAcctId(), dalytranRecord.getDalytranTypeCd(), dalytranRecord.getDalytranCatCd()));
         tranCatBalRecord.setTranCatBal(new fDecimal(tranCatBalRecord.getTranCatBal(), 2).add(dalytranRecord.getDalytranAmt(), 2).bigDecimalValue());
 
-        // create trancatbalrecord
         System.out.println("Create trancatbal record with id: " + tranCatBalRecord.getTranCatBalRecordId());
         tranCatBalRecordRepository.save(tranCatBalRecord);
 
@@ -310,15 +309,9 @@ public class CBTRN02CProcessor implements ItemProcessor<DalytranRecord, TranReco
         tranCatBalRecord.setTranCatBal(new fDecimal(tranCatBalRecord.getTranCatBal(), 2).add(dalytranRecord.getDalytranAmt(), 2).bigDecimalValue());
         System.out.println("Update trancatbal id: " + tranCatBalRecord.getTranCatBalRecordId() + " value: " + tranCatBalRecord.getTranCatBal());
         System.out.println("Result update: " + tranCatBalRecordRepository.saveAndFlush(tranCatBalRecord));
-//        tranCatBalRecordRepository.save(tranCatBalRecord);
 
         TcatbalfStatus_Accessor.setTcatbalfStatus(tcatbalfStatus, "00");
-        // TODO : RewriteStatement not yet converted
-      /*
-      =============
-      REWRITE FD-TRAN-CAT-BAL-RECORD FROM TRAN-CAT-BAL-RECORD
-      =============
-      */
+
         if (StringUtil.compare(TcatbalfStatus_Accessor.getTcatbalfStatus(tcatbalfStatus), "00") == 0){
             applResult = 0;
         } else {
@@ -347,19 +340,7 @@ public class CBTRN02CProcessor implements ItemProcessor<DalytranRecord, TranReco
             accountRecord.setAcctCurrCycDebit(new fDecimal(accountRecord.getAcctCurrCycDebit(), 2).add(dalytranRecord.getDalytranAmt(), 2).bigDecimalValue());
         }
 
-//        System.out.println("Update account record with id: " + accountRecord.getAcctId());
         accountRecordRepository.save(accountRecord);
-        // TODO : RewriteStatement not yet converted
-      /*
-      =============
-      REWRITE FD-ACCTFILE-REC FROM  ACCOUNT-RECORD
-              INVALID KEY
-                MOVE 109 TO WS-VALIDATION-FAIL-REASON
-                MOVE 'ACCOUNT RECORD NOT FOUND'
-                  TO WS-VALIDATION-FAIL-REASON-DESC
-           END-REWRITE
-      =============
-      */
         return ReturnValueConst.CONTINUE;
     }
 
