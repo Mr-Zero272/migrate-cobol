@@ -5,7 +5,11 @@ import axios from 'axios';
 import httpConfig from '../../config/httpConfig';
 
 import { GridItem } from '../../components/GridSystem';
+<<<<<<< refs/remotes/origin/khanglt6
 import Input from '../../components/Input';
+=======
+import { useNavigate } from 'react-router-dom';
+>>>>>>> local
 
 export default function COUSR01() {
     
@@ -32,6 +36,7 @@ errmsg: string,
     }
     
     const [formData, setFormData] = useState<formInput>(
+<<<<<<< refs/remotes/origin/khanglt6
     {
         fname: '',
 lname: '',
@@ -61,6 +66,98 @@ errmsg: '',
         [event.target.name]: event.target.value,
         };
     });
+=======
+        {
+            secUsrFname: '',
+            secUsrLname: '',
+            secUsrId: '',
+            secUsrPwd: '',
+            secUsrType: '',
+        });
+
+        const navigate = useNavigate();
+
+    // State lưu trữ dữ liệu nhận từ server
+    const [receivedData, setReceivedData] = useState<formOutput>(
+        {
+            cousr01: '',
+            cousr1a: '',
+            trnname: 'CU01',
+            title01: '',
+            curdate: 'mm/dd/yy',   // Mặc định là giá trị placeholder
+            pgmname: 'COUSR01',
+            title02: '',
+            curtime: 'hh:mm:ss',   // Mặc định là giá trị placeholder
+            errmsg: '',
+        });
+
+    // State lưu lỗi và trạng thái lỗi
+    const [error, setError] = useState<string>('');
+    const [isError, setIsError] = useState(false);
+
+    // Hàm lấy giờ hiện tại theo định dạng HH:MM:SS
+    const getCurrentTime = (): string => {
+        const now = new Date();
+        return now.toLocaleTimeString("en-US", { hour12: false });
+    };
+
+        useEffect(() => {
+            const handleKeyDown = (event) => {
+            switch (event.key) {
+                case 'F3':
+                event.preventDefault();
+                navigate("/COADM01");
+                break;
+                default:
+                break;
+            }
+            };
+            document.addEventListener('keydown', handleKeyDown);
+            return () => {
+            document.removeEventListener('keydown', handleKeyDown);
+            };
+        }, []);
+
+    // Hàm lấy ngày hiện tại theo định dạng MM/DD/YY
+    const getCurrentDate = (): string => {
+        const now = new Date();
+        const month = String(now.getMonth() + 1).padStart(2, "0"); // Lấy tháng (0-based index)
+        const day = String(now.getDate()).padStart(2, "0");
+        const year = String(now.getFullYear()).slice(-2); // Lấy 2 số cuối của năm
+        return `${month}/${day}/${year}`;
+    };
+
+    // useEffect để cập nhật ngày và giờ khi component mount
+    useEffect(() => {
+        // Cập nhật ngày và giờ ngay khi component render
+        setReceivedData((prev) => ({
+            ...prev,
+            curtime: getCurrentTime(),
+            curdate: getCurrentDate(),
+        }));
+
+        // Thiết lập interval để cập nhật giờ mỗi giây
+        const interval = setInterval(() => {
+            setReceivedData((prev) => ({
+                ...prev,
+                curtime: getCurrentTime(),
+            }));
+        }, 1000); // Cập nhật mỗi giây
+
+        return () => clearInterval(interval); // Xóa interval khi unmount
+    }, []);
+
+
+    // Hàm xử lý sự kiện khi nhập vào input
+    const handleInputChange = (
+        e: React.ChangeEvent<HTMLInputElement>,
+        field: keyof formInput
+    ) => {
+        setFormData({
+            ...formData,
+            [field]: e.target.value
+        });
+>>>>>>> local
     };
 
     const handleSubmit = async (event: KeyboardEvent<HTMLInputElement>) => {

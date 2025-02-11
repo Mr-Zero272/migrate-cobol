@@ -1,19 +1,33 @@
 
-import { type ChangeEvent, useState, type KeyboardEvent } from 'react';
+import { type ChangeEvent, useState, type KeyboardEvent, useEffect } from 'react';
 import { Helmet } from 'react-helmet';
 import axios from 'axios';
 import httpConfig from '../../config/httpConfig';
 
 import { GridItem } from '../../components/GridSystem';
 import Input from '../../components/Input';
+<<<<<<< refs/remotes/origin/khanglt6
 
 export default function COUSR03() {
     
+=======
+import { useLocation, useNavigate } from 'react-router-dom';
+
+export default function COUSR03() {
+    const navigate = useNavigate();
+    const [errorMessage, setErrorMessage] = useState<string>(""); 
+      const location = useLocation();
+      const { usridin } = location.state as { usridin: string } || "";
+    const [id, setId] = useState<string>(usridin || ""); 
+>>>>>>> local
     type formInput = {
         usridin: string,
-
     }
-
+    useEffect(() => {
+        if ( !(location.state as any)?.fromCOUSR00 ) {
+          navigate('/COUSR00', { replace: true });
+        }
+      }, [location, navigate]); 
     type formOutput = {
         cousr03: string,
 cousr3a: string,
@@ -39,10 +53,10 @@ errmsg: string,
      {
         cousr03: '',
 cousr3a: '',
-trnname: '',
+trnname: 'CU03',
 title01: '',
 curdate: 'mm/dd/yy',
-pgmname: '',
+pgmname: 'COUSR03C',
 title02: '',
 curtime: 'hh:mm:ss',
 fname: '',
@@ -60,7 +74,86 @@ errmsg: '',
         };
     });
     };
+<<<<<<< refs/remotes/origin/khanglt6
 
+=======
+    const resetForm = () => {
+        setId("");
+        setFormData({
+            usridin: '',  // Reset lại input field
+         
+        });
+        setReceivedData({
+            cousr03: '',
+            cousr3a: '',
+            trnname: '',
+            title01: '',
+            curdate: 'mm/dd/yy',
+            pgmname: '',
+            title02: '',
+            curtime: 'hh:mm:ss',
+            fname: '',
+            lname: '',
+            usrtype: '',
+            errmsg: '',
+        });
+    
+     
+    };
+
+
+      useEffect(() => {
+                const handleKeyDown = (event) => {
+                switch (event.key) {
+                    case 'F3':
+                    event.preventDefault();
+                    navigate(-1);
+                    break;
+                    default:
+                    break;
+                }
+                };
+                document.addEventListener('keydown', handleKeyDown);
+                return () => {
+                document.removeEventListener('keydown', handleKeyDown);
+                };
+            }, []);
+
+            const getCurrentTime = (): string => {
+                const now = new Date();
+                return now.toLocaleTimeString("en-US", { hour12: false });
+            };
+
+            const getCurrentDate = (): string => {
+                const now = new Date();
+                const month = String(now.getMonth() + 1).padStart(2, "0"); // Lấy tháng (0-based index)
+                const day = String(now.getDate()).padStart(2, "0");
+                const year = String(now.getFullYear()).slice(-2); // Lấy 2 số cuối của năm
+                return `${month}/${day}/${year}`;
+            };
+        
+            // useEffect để cập nhật ngày và giờ khi component mount
+            useEffect(() => {
+                // Cập nhật ngày và giờ ngay khi component render
+                setReceivedData((prev) => ({
+                    ...prev,
+                    curtime: getCurrentTime(),
+                    curdate: getCurrentDate(),
+                }));
+        
+                // Thiết lập interval để cập nhật giờ mỗi giây
+                const interval = setInterval(() => {
+                    setReceivedData((prev) => ({
+                        ...prev,
+                        curtime: getCurrentTime(),
+                    }));
+                }, 1000); // Cập nhật mỗi giây
+        
+                return () => clearInterval(interval); // Xóa interval khi unmount
+            }, []);
+        
+    
+>>>>>>> local
     const handleSubmit = async (event: KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
         for (const key in formData) {
@@ -80,10 +173,10 @@ errmsg: '',
     
   return (
     <>
-     
-    <Helmet>
-        <title>COUSR03</title>
-    </Helmet>
+        
+        <Helmet>
+            <title>COUSR03</title>
+        </Helmet>
     
 <GridItem col={1} row={1}>
     <pre style={{color:"#7faded"}}>
