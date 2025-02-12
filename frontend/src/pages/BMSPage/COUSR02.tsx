@@ -93,7 +93,7 @@ export default function COUSR02() {
     if (data.secUsrPwd.length !== 8)
       return setError('Password must be exactly 8 characters...');
     if (!data.secUsrType) return setError('User Type can NOT be empty...');
-    if (data.secUsrType !== "U" && data.secUsrType !=="A") return setError('User type must be A or U');
+    if (typeof data.secUsrType !=="string") return setError('User type must be A or U');
     if (JSON.stringify(data) === JSON.stringify(initialData)) {
       return setError('No data changes to update...');
     }
@@ -139,7 +139,9 @@ export default function COUSR02() {
         case 'F3':
           event.preventDefault();
           await updateUserData(formData);
-           navigate("/COADM01");
+          setTimeout(()=>{
+            navigate("/COADM01");
+          }, 2000)
           break;
         case 'F5':
           event.preventDefault();
